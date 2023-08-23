@@ -1,0 +1,10 @@
+D:\Wild Wind\Sources\Repos\Routrek.Granados\bin\Debug\net48\Routrek.Granados.dll
+D:\Wild Wind\Sources\Repos\Routrek.Granados\bin\Debug\net48\Routrek.Granados.pdb
+D:\Wild Wind\Sources\Repos\Routrek.Granados\bin\Debug\net48\System.Runtime.CompilerServices.Unsafe.dll
+D:\Wild Wind\Sources\Repos\Routrek.Granados\bin\Debug\net48\System.Threading.Tasks.Extensions.dll
+D:\Wild Wind\Sources\Repos\Routrek.Granados\obj\Debug\net48\Routrek.Granados.csproj.AssemblyReference.cache
+D:\Wild Wind\Sources\Repos\Routrek.Granados\obj\Debug\net48\Routrek.Granados.GeneratedMSBuildEditorConfig.editorconfig
+D:\Wild Wind\Sources\Repos\Routrek.Granados\obj\Debug\net48\Routrek.Granados.csproj.CoreCompileInputs.cache
+D:\Wild Wind\Sources\Repos\Routrek.Granados\obj\Debug\net48\Routrek.Granados.csproj.CopyComplete
+D:\Wild Wind\Sources\Repos\Routrek.Granados\obj\Debug\net48\Routrek.Granados.dll
+D:\Wild Wind\Sources\Repos\Routrek.Granados\obj\Debug\net48\Routrek.Granados.pdb

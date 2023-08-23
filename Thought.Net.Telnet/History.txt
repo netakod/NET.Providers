@@ -1,0 +1,36 @@
+
+===========================================================================
+Version 0.20
+===========================================================================
+
+  DJP 2007-05-30 
+
+    This release has too many changes to list individually.  Much of the
+    low-level code has been completely refactored.  For example, the
+    new TelnetParser class is responsible for handling the low-level
+    communication mechanisms of the protocol.  Refer to the sample
+    applications or the unit testing solution for examples.
+
+    Subnegotiations are not supported; they will be added in version 0.3.
+
+    The next release (0.21) will focus on code cleanup and improved
+    comments (as well as any bug fixes).  This version should be released
+    sometime in mid to late June.
+
+
+===========================================================================                                 
+Version 0.11
+===========================================================================
+
+  DJP 2007-03-30 - Organized for publication on www.codeplex.com
+                 - Added: TelnetClient.Write(byte)
+                 - Fixed: ByteBuffer constructor allowed zero capacity
+                 - Fixed: ByteBuffer.RemoveAt name typo
+                 - Fixed: ByteBuffer.CollapseDoubles not implemented
+                 - Fixed: ByteBuffer.RemoveAt not copying array correctly
+                 - Fixed: TelnetClient.OnWontOption not being raised
+                 - Renamed: TelnetState to TelnetProtocolState
+                 - Renamed: SendEscaped to Write
+                                
+  DJP 2007-03-16 - Added read-only Socket property to TelnetClient
+  

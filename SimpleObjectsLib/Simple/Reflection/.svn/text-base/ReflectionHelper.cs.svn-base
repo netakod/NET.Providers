@@ -1,0 +1,291 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Reflection;
+
+namespace NET.SimpleObjects.Helper
+{
+    public static class ReflectionHelper
+    {
+        public static object GetPropertyObjectByReflection(PropertyInfo propertyInfo, object objectInstance)
+        {
+            object propertyObject;
+
+            try
+            {
+                propertyObject = propertyInfo.GetValue(objectInstance, null);
+            }
+            catch
+            {
+                try
+                {
+                    propertyObject = propertyInfo.GetValue(null, null);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+
+            return propertyObject;
+        }
+
+        public static object GetFieldObjectByReflection(FieldInfo fieldInfo, object objectInstance)
+        {
+            object fieldObject;
+
+            try
+            {
+                fieldObject = fieldInfo.GetValue(objectInstance);
+            }
+            catch
+            {
+                try
+                {
+                    fieldObject = fieldInfo.GetValue(null);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+
+            return fieldObject;
+        }
+
+        public static bool CompareTypes(Type type1, Type type2)
+        {
+            return CompareTypes(type1, type2, TypeComparisonCriteria.SameType);
+        }
+
+        public static bool CompareTypes(Type type1, Type type2, TypeComparisonCriteria comparisonCriteria)
+        {
+            if (type1.Equals(type2))
+            {
+                return true;
+            }
+
+            bool comparison = false;
+
+            switch (comparisonCriteria)
+            {
+                case TypeComparisonCriteria.Subclass:
+                    comparison = type1.IsSubclassOf(type2) || type2.IsSubclassOf(type1);
+                    break;
+                case TypeComparisonCriteria.Instance:
+                    object obj1 = Activator.CreateInstance(type1) as object;
+                    object obj2 = Activator.CreateInstance(type2) as object;
+                    comparison = type1.IsInstanceOfType(obj2) || type2.IsInstanceOfType(obj1);
+                    obj1 = obj2 = null;
+                    break;
+            }
+
+            return comparison;
+        }
+
+        public static bool IsEqual(object value1, object value2)
+        {
+            Type type1, type2;
+
+            if (value1 == null && value2 == null)
+            {
+                return true;
+            }
+
+            if (value1 == null || value2 == null)
+            {
+                return false;
+            }
+
+            type1 = value1.GetType();
+            type2 = value2.GetType();
+
+            if (type1 != type2)
+            {
+                return false;
+            }
+
+            if (type1 == typeof(int))
+            {
+                if ((int)value1 == (int)value2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            if (type1 == typeof(string))
+            {
+                if (((string)value1).Trim() == ((string)value2).Trim())
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            if (type1 == typeof(DBNull))
+            {
+                if (type2 == typeof(DBNull))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            if (value1 == null)
+            {
+                if (value2 == null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return value1.Equals(value2);
+        }
+
+        public static SimpleTypeInfo GetSimpleTypeInfo<T>()
+        {
+            return GetSimpleTypeInfo(typeof(T));
+        }
+        
+        public static SimpleTypeInfo GetSimpleTypeInfo(Type type)
+        {
+            return new SimpleTypeInfo(type);
+        }
+
+        public static string GetTypeName(Type type)
+        {
+            string name;
+
+            if (type.IsGenericType)
+            {
+                name = type.Name.Split('`')[0];
+                name += "<";
+
+                Type[] typeGenericArguments = type.GetGenericArguments();
+
+                for (int i = 0; i < typeGenericArguments.Length; i++)
+                {
+                    if (i > 0)
+                    {
+                        name += ", ";
+                    }
+
+                    name += GetTypeName(typeGenericArguments[i]);
+                }
+
+                name += ">";
+            }
+            else
+            {
+                name = type.Name;
+
+                if (type == typeof(void))
+                {
+                    name = "void";
+                }
+                else if (type == typeof(bool))
+                {
+                    name = "bool";
+                }
+                else if (type == typeof(string))
+                {
+                    name = "string";
+                }
+                else if (type == typeof(int))
+                {
+                    name = "int";
+                }
+                else if (type == typeof(long))
+                {
+                    name = "long";
+                }
+            }
+
+            return name;
+        }
+
+        public static object TryChangeType(object value, Type declaredType)
+        {
+            object result = value;
+            
+            if (declaredType != null)
+            {
+                if (value != null)
+                {
+                    try
+                    {
+                        result = Convert.ChangeType(value, declaredType);
+                    }
+                    catch
+                    {
+                    }
+                }
+                else
+                {
+                    result = declaredType.IsValueType ? Activator.CreateInstance(declaredType) : null;
+                }
+            }
+
+            return result;
+        }
+    }
+
+    public class SimpleTypeInfo
+    {
+        public SimpleTypeInfo(Type type)
+	    {
+            this.Type = type;
+	    }
+
+        public Type Type { get; private set; }
+        
+        public string Name 
+        {
+            get { return ReflectionHelper.GetTypeName(this.Type); }
+        }
+
+        public bool IsGeneric
+        {
+            get { return this.Type.IsGenericType; }
+        }
+
+        public bool IsNullable
+        {
+            get
+            {
+                bool result = true;
+                GenericParameterAttributes sConstraints = this.Type.GenericParameterAttributes & GenericParameterAttributes.SpecialConstraintMask;
+
+                if (GenericParameterAttributes.None != (sConstraints & GenericParameterAttributes.NotNullableValueTypeConstraint))
+                {
+                    result = false;
+                }
+
+            	return result;
+            }
+        }
+
+        public bool IsVoid
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+}

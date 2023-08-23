@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.0;netstandard1.3;netstandard2.0;net5.0;net6.0;net7.0</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>SshNet.Security.Cryptography</AssemblyName>
+    <AssemblyOriginatorKeyFile>../SshNet.Security.Cryptography.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.0' ">
+    <PackageReference Include="System.IO" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+    <PackageReference Include="System.IO" Version="4.3.0" />
+    <PackageReference Include="System.Security.Cryptography.Primitives" Version="4.3.0" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+    <DefineConstants>$(DefineConstants);FEATURE_CRYPTO_HASHALGORITHM</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);FEATURE_CRYPTO_HASHALGORITHM</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net5.0' or '$(TargetFramework)' == 'net6.0' or '$(TargetFramework)' == 'net7.0' ">
+    <DefineConstants>$(DefineConstants);FEATURE_CRYPTO_HASHALGORITHM</DefineConstants>
+  </PropertyGroup>
+  <Import Project="..\SshNet.Security.Cryptography.Shared\SshNet.Security.Cryptography.Shared.projitems" Label="Shared" />
+</Project>

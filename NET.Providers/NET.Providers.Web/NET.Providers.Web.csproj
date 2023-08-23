@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0; netstandard2.1</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Network\Simple.Network.csproj" />
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Threading\Simple.Threading.csproj" />
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple\Simple.csproj" />
+  </ItemGroup>
+
+</Project>

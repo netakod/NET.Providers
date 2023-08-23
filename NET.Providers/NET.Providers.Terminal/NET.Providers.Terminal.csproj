@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0; netstandard2.1</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\HtmlAgilityPack\HtmlAgilityPack.csproj" />
+    <ProjectReference Include="..\..\Routrek.Granados-SSH1\Routrek.Granados.csproj" />
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Network\Simple.Network.csproj" />
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple\Simple.csproj" />
+    <ProjectReference Include="..\..\SSH.NET\src\Renci.SshNet\Renci.SshNet.csproj" />
+    <ProjectReference Include="..\NET.Providers.Telnet\NET.Providers.Telnet.csproj" />
+  </ItemGroup>
+
+</Project>

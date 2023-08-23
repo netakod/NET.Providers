@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0; netstandard2.1</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\HtmlAgilityPack\HtmlAgilityPack.csproj" />
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Modeling\Simple.Modeling.csproj" />
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Network\Simple.Network.csproj" />
+    <ProjectReference Include="..\NET.Providers.Snmp\NET.Providers.Snmp.csproj" />
+    <ProjectReference Include="..\NET.Providers.Telnet\NET.Providers.Telnet.csproj" />
+    <ProjectReference Include="..\NET.Providers.Terminal\NET.Providers.Terminal.csproj" />
+    <ProjectReference Include="..\NET.Providers.Web\NET.Providers.Web.csproj" />
+  </ItemGroup>
+
+</Project>

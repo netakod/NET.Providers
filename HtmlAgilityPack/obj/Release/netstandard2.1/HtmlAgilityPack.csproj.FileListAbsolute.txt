@@ -1,0 +1,10 @@
+D:\Wild Wind\Sources\Repos\HtmlAgilityPack\bin\Release\netstandard2.1\HtmlAgilityPack.deps.json
+D:\Wild Wind\Sources\Repos\HtmlAgilityPack\bin\Release\netstandard2.1\HtmlAgilityPack.dll
+D:\Wild Wind\Sources\Repos\HtmlAgilityPack\bin\Release\netstandard2.1\HtmlAgilityPack.pdb
+D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Release\netstandard2.1\HtmlAgilityPack.csproj.AssemblyReference.cache
+D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Release\netstandard2.1\HtmlAgilityPack.GeneratedMSBuildEditorConfig.editorconfig
+D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Release\netstandard2.1\HtmlAgilityPack.AssemblyInfoInputs.cache
+D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Release\netstandard2.1\HtmlAgilityPack.AssemblyInfo.cs
+D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Release\netstandard2.1\HtmlAgilityPack.csproj.CoreCompileInputs.cache
+D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Release\netstandard2.1\HtmlAgilityPack.dll
+D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Release\netstandard2.1\HtmlAgilityPack.pdb

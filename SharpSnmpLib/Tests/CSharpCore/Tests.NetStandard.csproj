@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup Label="Configuration">
+    <RootNamespace>Lextm.SharpSnmpLib</RootNamespace>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>sharpsnmplib.tests.snk</AssemblyOriginatorKeyFile>
+    <AssemblyName>SharpSnmpLib.Tests.NetStandard</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType Condition="'$(TargetFramework)'!='net471'">Exe</OutputType>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' AND '$(MSBuildAssemblyVersion)' == '17.0' ">net6.0;net5.0;netcoreapp3.1;net471</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' AND '$(MSBuildAssemblyVersion)' == '16.0' ">net5.0;netcoreapp3.1;net471</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' AND '$(MSBuildAssemblyVersion)' == '17.0'">net6.0;net5.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' AND '$(MSBuildAssemblyVersion)' == '16.0'">net5.0;netcoreapp3.1</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="**\*.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Properties\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="packages.config" />
+    <None Remove="Tests.csproj.vspscc" />
+    <None Remove="Tests.nuget.props" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sharpsnmplib.tests.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AltCover" Version="8.2.833" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='net471'">
+    <PackageReference Include="System.Net.Sockets" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SharpSnmpLib\SharpSnmpLib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Resources\fivevarbinds.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\get.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\getresponse.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\novarbind.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\onevarbind.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\trapv3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\trapv3auth">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\trapv3authpriv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\twovarbinds.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\v3authNoPriv_BER_Issue">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
