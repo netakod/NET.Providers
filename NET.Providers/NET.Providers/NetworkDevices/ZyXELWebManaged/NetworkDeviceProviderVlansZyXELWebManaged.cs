@@ -33,7 +33,7 @@ namespace NET.Tools.Providers
             return true;
         }
 
-        public override async ValueTask<IEnumerable<VlanInfo>> GetVlans()
+        public override async ValueTask<IEnumerable<VlanInfo>> GetVlanInfos()
         {
             List<VlanInfo> result = new List<VlanInfo>();
             HttpWebResponse response = await this.Provider.Web.SendGetRequestAsync("vlanlist.htm");
@@ -66,7 +66,7 @@ namespace NET.Tools.Providers
             return result;
         }
 
-        public override async ValueTask Add(int vlanId, string name)
+        public override async ValueTask Set(int vlanId, string name)
         {
             //// Create vlan and set all trunk ports to be fixed
             //IList<string> trunkPortInterfaceNames = (this.Provider.Interfaces as NetworkDeviceProviderInterfacesZyXEL).TrunkPortInterfaceNames;
@@ -133,10 +133,10 @@ namespace NET.Tools.Providers
             return new ValueTask<string>(String.Format("Vlan{0}", vlanId.ToString()));
         }
 
-        public override ValueTask SetName(int vlanId, string vlanName)
-        {
-            // Vlan name cannot be set (no vlan naming on device).
-            return new ValueTask();
-        }
+        //public override ValueTask SetName(int vlanId, string vlanName)
+        //{
+        //    // Vlan name cannot be set (no vlan naming on device).
+        //    return new ValueTask();
+        //}
     }
 }

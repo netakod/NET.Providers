@@ -15,7 +15,7 @@ namespace NET.Tools.Providers
             return true;
         }
 
-        public override async ValueTask<IEnumerable<VlanInfo>> GetVlans()
+        public override async ValueTask<IEnumerable<VlanInfo>> GetVlanInfos()
         {
             const string strVlan = "vlan";
             const string strName = "name";
@@ -54,7 +54,7 @@ namespace NET.Tools.Providers
             return result;
         }
 
-        public override async ValueTask Add(int vlanId, string name)
+        public override async ValueTask Set(int vlanId, string name)
         {
 			//// First find all trunk ports
 			//List<int> trunkPortNumbers = new List<int>();
@@ -127,7 +127,7 @@ namespace NET.Tools.Providers
             return name;
         }
 
-        public override async ValueTask SetName(int vlanId, string vlanName)
+        public async ValueTask SetName(int vlanId, string vlanName)
         {
             string zyxelVlanName = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim().Replace(' ', '_');
             

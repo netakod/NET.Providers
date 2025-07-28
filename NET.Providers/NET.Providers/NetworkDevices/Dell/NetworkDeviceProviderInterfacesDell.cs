@@ -76,12 +76,12 @@ namespace NET.Tools.Providers
         
         public override async ValueTask SetDescription(string interfaceName, string description)
         {
-			try
-			{
-				await base.SetDescription(interfaceName, description);
-			}
-			catch
-			{
+			//try
+			//{
+			//	await base.SetDescription(interfaceName, description);
+			//}
+			//catch
+			//{
 				string newInterfaceName = (interfaceName.ToLower().StartsWith("vlan")) ? "vlan " + interfaceName.Substring(4) : interfaceName;
                 string newDescription = description.IsNullOrEmpty() ? " " : description.Replace(' ', '_');
                 string descriptionCommand = (interfaceName.ToLower().StartsWith("vlan")) ? "name" : "description";
@@ -100,7 +100,7 @@ namespace NET.Tools.Providers
 
                 await this.Provider.Terminal.SendAsync(descriptionCommand);
                 await this.Provider.Terminal.SendAsync("exit");
-			}
+			//}
 		}
 
 		public override async ValueTask<InterfaceAdminStatus> GetAdminStatus(string interfaceName)
@@ -970,7 +970,7 @@ namespace NET.Tools.Providers
                 int i = 0, j = 0;
                 int layer3InterfaceIndex = 10000;
                 int managementVlanId = -1;
-                IEnumerable<VlanInfo> vlans = await this.Provider.Vlans.GetVlans();
+                IEnumerable<VlanInfo> vlans = await this.Provider.Vlans.GetVlanInfos();
 				string ethernetInterfacePrefix = (dellDeviceType == DellDeviceType.PowerConnect62xx) ? "Ethernet " : "";
 				string portChanelPrefix = (dellDeviceType == DellDeviceType.PowerConnect62xx) ? "ch" : "po";
 				string portChannelInterfacePrefix = (dellDeviceType != DellDeviceType.GeneralDellDevice) ? "Port Channel " : "";

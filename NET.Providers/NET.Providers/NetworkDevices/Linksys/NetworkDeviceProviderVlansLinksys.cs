@@ -13,7 +13,7 @@ namespace NET.Tools.Providers
 	[NetworkDeviceProviderType(DeviceProviderType.Linksys)]
     public class NetworkDeviceProviderVlansLinksys : NetworkDeviceProviderVlansGeneric, INetworkDeviceProviderVlans
     {
-		public override async ValueTask<IEnumerable<VlanInfo>> GetVlans()
+		public override async ValueTask<IEnumerable<VlanInfo>> GetVlanInfos()
         {
             List<VlanInfo> result = new List<VlanInfo>();
 
@@ -83,7 +83,7 @@ namespace NET.Tools.Providers
             return result;
         }
 
-        public override async ValueTask Add(int vlanId, string name)
+        public override async ValueTask Set(int vlanId, string name)
         {
             if (this.Provider.UseWeb && !this.Provider.UseTerminal)
             {
@@ -155,7 +155,7 @@ namespace NET.Tools.Providers
             return result;
         }
 
-        public override async ValueTask SetName(int vlanId, string vlanName)
+        private async ValueTask SetName(int vlanId, string vlanName)
         {
             string newVlanName = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim();
             

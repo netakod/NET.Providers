@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NET.Tools.Telnet_DevelopOld;
 using Simple;
 
 namespace NET.Tools.Providers
@@ -15,13 +16,12 @@ namespace NET.Tools.Providers
             return true;
         }
 
-        public override async ValueTask<IEnumerable<VlanInfo>> GetVlans()
+        public override async ValueTask<IEnumerable<VlanInfo>> GetVlanInfos()
         {
             const string strVlanIsl = "VLAN ISL";
             const string strName = "Name";
             List<VlanInfo> result = new List<VlanInfo>();
             VlanInfo providerVlanInfo = VlanInfo.Empty;
-
             await this.Provider.Terminal.ExitConfigModeAsync();
             
             string response = await this.Provider.Terminal.SendAsync("vlan database");
@@ -30,36 +30,48 @@ namespace NET.Tools.Providers
 			{
 				response = await this.Provider.Terminal.SendAsync("show");
 				string[] lines = response.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                int vlanId = 0;
 
 				for (int i = 0; i < lines.Length; i++)
 				{
 					string line = lines[i].Trim();
 
-					if (line.TrimStart().StartsWith(strVlanIsl))
-					{
-						string[] lineItems = line.Split(':');
-						string vlanIdString = lineItems.Last();
-						int vlanId = Conversion.TryChangeType<int>(vlanIdString);
+                    if (line.TrimStart().StartsWith(strVlanIsl))
+                    {
+                        string vlanIdString = line.Split(':').Last();
+                        vlanId = Conversion.TryChangeType<int>(vlanIdString);
+                    }
 
-						providerVlanInfo = new VlanInfo(vlanId, String.Empty);
+					if (line.TrimStart().StartsWith(strName))
+					{
+						string vlanName = line.Split(':').Last().Trim();
+
+						providerVlanInfo = new VlanInfo(vlanId, vlanName);
 						result.Add(providerVlanInfo);
 					}
 
-					if (line.TrimStart().StartsWith(strName) && providerVlanInfo != VlanInfo.Empty && String.IsNullOrEmpty(providerVlanInfo.VlanName))
-					{
-						string[] lineItems = line.Split(':');
-						string vlanName = lineItems.Last().Trim();
+					//string vlanName = String.Empty;
 
-						providerVlanInfo.VlanName = vlanName;
-					}
+					//	if (i + 1 < lines.Length)
+					//	{
+     //                       string vlanNameLine = lines[i + 1];
+
+     //                       if (vlanNameLine.TrimStart().StartsWith(strName))
+     //                           vlanName = vlanNameLine.Split(':').Last().Trim();
+					//	}
+
+					//	providerVlanInfo = new VlanInfo(vlanId, vlanName);
+					//	result.Add(providerVlanInfo);
+					//}
 				}
 
 				await this.Provider.Terminal.SendAsync("exit");
 			}
-			else
+			else // vlan database
 			{
 				List<int> vlanIds = new List<int>();
 				response = await this.Provider.Terminal.SendAsync("show vlan");
+				// sh vlan brief is for switches  and for switching modules on routers it is sh vlan-switch brief.
 				string[][] vlanTable = ProviderHelper.GetTable(response, "----");
 
 				foreach (string[] lineArray in vlanTable)
@@ -82,7 +94,7 @@ namespace NET.Tools.Providers
             return result;
         }
 
-        public override async ValueTask Add(int vlanId, string name)
+        public override async ValueTask Set(int vlanId, string name)
         {
                               await this.Provider.Terminal.ExitConfigModeAsync();
             string response = await this.Provider.Terminal.SendAsync("vlan database");
@@ -113,16 +125,22 @@ namespace NET.Tools.Providers
                     
                     throw new ProviderInfoException("Add VLAN has failed: " + failedReason);
                 }
-                else
+				else
                 {
-                    response = await this.Provider.Terminal.SendAsync("exit");
+					if (response.ToLower().Contains("apply not allowed")) // Apply not allowed ewhen device is in CLIENT/SERVER mode -> set vtp transparent mode
+					{
+						response = await this.Provider.Terminal.SendAsync("vtp transparent");
+						response = await this.Provider.Terminal.SendAsync("apply");
+					}
+
+					response = await this.Provider.Terminal.SendAsync("exit");
 
                     if (response.ToLower().Contains("abort"))
                     {
                         string failedReason = response;
-                        
+
                         await this.Provider.Terminal.SendAsync("abort");
-                        
+
                         throw new ProviderInfoException("Add VLAN has failed: " + failedReason);
                     }
                 }
@@ -181,57 +199,57 @@ namespace NET.Tools.Providers
             return name;
         }
 
-        public override async ValueTask SetName(int vlanId, string vlanName)
-        {
-            string newVlanName = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim().Replace(' ', '_'); 
+        //public override async ValueTask SetName(int vlanId, string vlanName)
+        //{
+        //    string newVlanName = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim().Replace(' ', '_'); 
             
-                              await this.Provider.Terminal.ExitConfigModeAsync();
-            string response = await this.Provider.Terminal.SendAsync("vlan database");
+        //                      await this.Provider.Terminal.ExitConfigModeAsync();
+        //    string response = await this.Provider.Terminal.SendAsync("vlan database");
 
-            if (response.ToLower().Contains("invalid input"))
-            {
-                // vlan database command is not available
-                           await this.Provider.Terminal.EnterConfigModeAsync();
-                response = await this.Provider.Terminal.SendAsync("vlan " + vlanId);
+        //    if (response.ToLower().Contains("invalid input"))
+        //    {
+        //        // vlan database command is not available
+        //                   await this.Provider.Terminal.EnterConfigModeAsync();
+        //        response = await this.Provider.Terminal.SendAsync("vlan " + vlanId);
 
-                if (response != null && response.Trim().Length > 0)
-                {
-                    throw new ProviderInfoException(response);
-                }
-                else
-                {
-                    await this.Provider.Terminal.SendAsync("name " + vlanName);
-                    await this.Provider.Terminal.SendAsync("exit");
-                }
-            }
-            else
-            {
-                           await this.Provider.Terminal.SendAsync("vlan " + vlanId + " name " + newVlanName);
-                response = await this.Provider.Terminal.SendAsync("apply");
+        //        if (response != null && response.Trim().Length > 0)
+        //        {
+        //            throw new ProviderInfoException(response);
+        //        }
+        //        else
+        //        {
+        //            await this.Provider.Terminal.SendAsync("name " + vlanName);
+        //            await this.Provider.Terminal.SendAsync("exit");
+        //        }
+        //    }
+        //    else
+        //    {
+        //                   await this.Provider.Terminal.SendAsync("vlan " + vlanId + " name " + newVlanName);
+        //        response = await this.Provider.Terminal.SendAsync("apply");
 
-                if (response.ToLower().Contains("abort"))
-                {
-                    // Too many vlans - User 'abort' command to exit
-                    string failedReason = response;
+        //        if (response.ToLower().Contains("abort"))
+        //        {
+        //            // Too many vlans - User 'abort' command to exit
+        //            string failedReason = response;
                     
-                    await this.Provider.Terminal.SendAsync("abort");
+        //            await this.Provider.Terminal.SendAsync("abort");
                     
-                    throw new ProviderInfoException("Set VLAN name has failed: " + failedReason);
-                }
-                else
-                {
-                    response = await this.Provider.Terminal.SendAsync("exit");
+        //            throw new ProviderInfoException("Set VLAN name has failed: " + failedReason);
+        //        }
+        //        else
+        //        {
+        //            response = await this.Provider.Terminal.SendAsync("exit");
 
-                    if (response.ToLower().Contains("abort"))
-                    {
-                        string failedReason = response;
+        //            if (response.ToLower().Contains("abort"))
+        //            {
+        //                string failedReason = response;
                         
-                        await this.Provider.Terminal.SendAsync("abort");
+        //                await this.Provider.Terminal.SendAsync("abort");
                         
-                        throw new ProviderInfoException("Set VLAN name has failed: " + failedReason);
-                    }
-                }
-            }
-        }
+        //                throw new ProviderInfoException("Set VLAN name has failed: " + failedReason);
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

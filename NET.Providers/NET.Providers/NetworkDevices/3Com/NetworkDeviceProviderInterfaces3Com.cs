@@ -15,19 +15,19 @@ namespace NET.Tools.Providers
 
         public override async ValueTask SetDescription(string interfaceName, string description)
         {
-            try
-            {
-                await base.SetDescription(interfaceName, description);
-            }
-            catch
-            {
+            //try
+            //{
+            //    await base.SetDescription(interfaceName, description);
+            //}
+            //catch
+            //{
                 string newDescription = description.IsNullOrEmpty() ? " " : description.Trim().Replace(' ', '_');
                 
                 await this.Provider.Terminal.EnterConfigModeAsync();
                 await this.Provider.Terminal.SendAsync("interface " + interfaceName);
                 await this.Provider.Terminal.SendAsync("description " + newDescription);
                 await this.Provider.Terminal.SendAsync("exit");
-            }
+            //}
         }
 
 		#endregion |   Interface Data   |

@@ -33,7 +33,7 @@ namespace NET.Tools.Providers
 			return strBridgeTrunk;
 		}
 
-        public override async ValueTask<IEnumerable<VlanInfo>> GetVlans()
+        public override async ValueTask<IEnumerable<VlanInfo>> GetVlanInfos()
         {
             List<VlanInfo> result = new List<VlanInfo>();
             string response = await this.Provider.Terminal.SendAsync("interface vlan print without-paging");
@@ -50,7 +50,7 @@ namespace NET.Tools.Providers
 			return result;
         }
 
-        public override async ValueTask Add(int vlanId, string name)
+        public override async ValueTask Set(int vlanId, string name)
         {
 			// Check if vlan already exists first
 			string response = await this.Provider.Terminal.SendAsync("interface vlan print where vlan-id=" + vlanId);
@@ -100,7 +100,7 @@ namespace NET.Tools.Providers
 			return name;
         }
 
-        public override async ValueTask SetName(int vlanId, string name)
+        private async ValueTask SetName(int vlanId, string name)
         {
 			string currentName = await this.GetName(vlanId);
 			string fixedName = "Vlan" + vlanId;

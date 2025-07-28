@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0; netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net8.0; netstandard2.1</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="System.IO.Pipelines" Version="6.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.10" />
+    <PackageReference Include="System.IO.Pipelines" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Network\Simple.Network.csproj" />
-    <ProjectReference Include="..\..\SimpleObjectsLib\Simple\Simple.csproj" />
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Core\Simple.Network\Simple.Network.csproj" />
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Core\Simple\Simple.csproj" />
   </ItemGroup>
 
 </Project>

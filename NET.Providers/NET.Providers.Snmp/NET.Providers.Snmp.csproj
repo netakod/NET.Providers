@@ -1,14 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0; netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net8.0; netstandard2.1</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\SharpSnmpLib\SharpSnmpLib\SharpSnmpLib.csproj" />
-    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Network\Simple.Network.csproj" />
-    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Threading\Simple.Threading.csproj" />
-    <ProjectReference Include="..\..\SimpleObjectsLib\Simple\Simple.csproj" />
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Core\Simple.Network\Simple.Network.csproj" />
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Core\Simple.Threading\Simple.Threading.csproj" />
+    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Core\Simple\Simple.csproj" />
   </ItemGroup>
 
 </Project>

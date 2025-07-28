@@ -1,10 +1,10 @@
-D:\Wild Wind\Sources\Repos\HtmlAgilityPack\bin\Debug\netstandard2.1\HtmlAgilityPack.deps.json
-D:\Wild Wind\Sources\Repos\HtmlAgilityPack\bin\Debug\netstandard2.1\HtmlAgilityPack.dll
-D:\Wild Wind\Sources\Repos\HtmlAgilityPack\bin\Debug\netstandard2.1\HtmlAgilityPack.pdb
-D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.csproj.AssemblyReference.cache
-D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.GeneratedMSBuildEditorConfig.editorconfig
-D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.AssemblyInfoInputs.cache
-D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.AssemblyInfo.cs
-D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.csproj.CoreCompileInputs.cache
-D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.dll
-D:\Wild Wind\Sources\Repos\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.pdb
+D:\Git\wild-wind\Sources\HtmlAgilityPack\bin\Debug\netstandard2.1\HtmlAgilityPack.deps.json
+D:\Git\wild-wind\Sources\HtmlAgilityPack\bin\Debug\netstandard2.1\HtmlAgilityPack.dll
+D:\Git\wild-wind\Sources\HtmlAgilityPack\bin\Debug\netstandard2.1\HtmlAgilityPack.pdb
+D:\Git\wild-wind\Sources\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.csproj.AssemblyReference.cache
+D:\Git\wild-wind\Sources\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.GeneratedMSBuildEditorConfig.editorconfig
+D:\Git\wild-wind\Sources\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.AssemblyInfoInputs.cache
+D:\Git\wild-wind\Sources\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.AssemblyInfo.cs
+D:\Git\wild-wind\Sources\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.csproj.CoreCompileInputs.cache
+D:\Git\wild-wind\Sources\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.dll
+D:\Git\wild-wind\Sources\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.pdb

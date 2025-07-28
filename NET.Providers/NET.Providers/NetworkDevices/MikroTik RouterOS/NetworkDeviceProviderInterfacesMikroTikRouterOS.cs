@@ -29,30 +29,30 @@ namespace NET.Tools.Providers
 
 		public override async ValueTask SetDescription(string interfaceName, string description)
 		{
-			try
-			{
-				await base.SetDescription(interfaceName, description);
-			}
-			catch
-			{
+			//try
+			//{
+			//	await base.SetDescription(interfaceName, description);
+			//}
+			//catch
+			//{
 				await this.Provider.Terminal.SendAsync($"interface {interfaceName} comment \"{description}\"");
-			}
+			//}
 		}
 
 		public override async ValueTask SetAdminStatus(string interfaceName, InterfaceAdminStatus adminStatus)
 		{
-			try
-			{
-				await base.SetAdminStatus(interfaceName, adminStatus);
-			}
-			catch 
-			{
+			//try
+			//{
+			//	await base.SetAdminStatus(interfaceName, adminStatus);
+			//}
+			//catch 
+			//{
 				string disabled = (adminStatus) == InterfaceAdminStatus.Down ? "yes" : "no";
 				string response = await this.Provider.Terminal.SendAsync($"interface set {interfaceName} disabled={disabled}");
 
 				if (response.ToLower().Contains("no such item"))
 					throw new ProviderInfoException($"Error set admin status on interface {interfaceName}: {response}");
-			}
+			//}
 		}
 
 		#endregion |   Interface Data   |
@@ -323,7 +323,7 @@ namespace NET.Tools.Providers
 						this.trunkPortInterfaceNames.Add(interfaceName);
 
 					switchName = await this.GetInterfaceEthernetSwitchName(interfaceName);
-					var vlans = await this.Provider.Vlans.GetVlans();
+					var vlans = await this.Provider.Vlans.GetVlanInfos();
 
 					foreach (var vlan in vlans)
 						await this.Provider.Terminal.SendAsync($"interface ethernet switch vlan add ports={interfaceName} switch={switchName} vlan-id={vlan.VlanId}");

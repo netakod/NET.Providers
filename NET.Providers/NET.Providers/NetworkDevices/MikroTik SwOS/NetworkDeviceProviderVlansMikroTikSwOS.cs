@@ -23,7 +23,7 @@ namespace NET.Tools.Providers
             return true;
         }
 
-        public override async ValueTask<IEnumerable<VlanInfo>> GetVlans()
+        public override async ValueTask<IEnumerable<VlanInfo>> GetVlanInfos()
         {
             List<VlanInfo> result = new List<VlanInfo>();
 			HashSet<int> vlanIds = new HashSet<int>();
@@ -75,7 +75,7 @@ namespace NET.Tools.Providers
 			 return result;
         }
 
-        public override async ValueTask Add(int vlanId, string name)
+        public override async ValueTask Set(int vlanId, string name)
         {
 			List<string> trunkPortNames = await (this.Provider.Interfaces as NetworkDeviceProviderInterfacesMikroTikSwOS).GetTrunkPortInterfaceNames();
 			IEnumerable<string> interfaceNames = await this.Provider.Interfaces.GetInterfaceNames();
@@ -89,7 +89,10 @@ namespace NET.Tools.Providers
 			string[] portVlanIdValues = this.WebClient.ParseMultipleValues(portVlanIdText);
 			var vlanConfigSegments = await this.WebClient.GetVlanConfigSegments();
 			int vlanIdHexDecimalPlaces = 4;
+			int vlanMembersDecimalPlaces = 8;
 			int vlanHeaderHexDecimalPlaces = 2;
+			bool hasMbrKey = false;
+			bool isDecimalPlacesNumFound = false;
 
 			foreach (var keyValuePairs in vlanConfigSegments) // Check if vlan already exists
 			{
@@ -104,11 +107,33 @@ namespace NET.Tools.Providers
 					return;
 				}
 
-				vlanIdHexDecimalPlaces = hexCurrentVlanIdText.Length - 2;
-				vlanHeaderHexDecimalPlaces = keyValuePairs["prt"].Length - 2;
+				if (!isDecimalPlacesNumFound)
+				{
+					vlanIdHexDecimalPlaces = hexCurrentVlanIdText.Length - 2;
+
+					// for the diferent version of SwOS, the newer has no prt key but mbr
+					if (keyValuePairs.ContainsKey("prt")) // prt value: [0x03,0x00,0x00,0x00,0x00,0x00]
+					{
+						string prt = keyValuePairs["prt"];
+						int posOfComma = prt.IndexOf(',');
+						string prtFirstValue = prt.Substring(1, posOfComma - 1);
+
+						vlanHeaderHexDecimalPlaces = prtFirstValue.Length - 2;
+					}
+					else if (keyValuePairs.ContainsKey("mbr"))
+					{
+						vlanMembersDecimalPlaces = keyValuePairs["mbr"].Length - 2;
+						hasMbrKey = true;
+					}
+
+					isDecimalPlacesNumFound = true;
+				}
 			}
 
 			string prtValues = "[";
+			int vlanMemebers = 0;
+			int portPos = 1;
+			//int zeroBasedInterfaceIndex = 0;
 
 			for (int i = 0; i < interfaceNames.Count(); i++)
 			{
@@ -116,29 +141,64 @@ namespace NET.Tools.Providers
 					prtValues += ",";
 
 				string interfaceName = interfaceNames.ElementAt(i);
-				InterfaceSwitchportMode trunkPortMode = (trunkPortNames.Contains(interfaceName)) ? InterfaceSwitchportMode.Trunk : InterfaceSwitchportMode.Access;
+				InterfaceSwitchportMode switchPortMode = (trunkPortNames.Contains(interfaceName)) ? InterfaceSwitchportMode.Trunk : InterfaceSwitchportMode.Access;
 				MikroTikVlanHeader vlanHeader = MikroTikVlanHeader.LeaveAsIs;
 
-				if (trunkPortMode == InterfaceSwitchportMode.Access)
+				if (switchPortMode == InterfaceSwitchportMode.Access)
 				{
 					string portVlanIdHex = portVlanIdValues[i];
 					int portVlanId = this.WebClient.ConvertHexStringToInt32(portVlanIdHex);
 
-					if (portVlanId != vlanId)
+					if (portVlanId == vlanId)
+						vlanMemebers |= portPos;
+					else
 						vlanHeader = MikroTikVlanHeader.NotAMember;
 				}
+				else if (switchPortMode == InterfaceSwitchportMode.Trunk)
+				{
+					var interfaces = this.Provider.Interfaces as NetworkDeviceProviderInterfacesMikroTikSwOS;
+					int zeroBasedInterfaceIndex = await interfaces.GetIndex(interfaceName) - 1; // We need zero-based indexing index
 
+					await interfaces.SetSwitchportPolicy(zeroBasedInterfaceIndex, switchportMode: InterfaceSwitchportMode.Trunk, vlanId); // Set
+					vlanMemebers |= portPos;
+				}
+
+				portPos = portPos << 1;
 				prtValues += this.WebClient.ConvertInt32ToHexString((int)vlanHeader, vlanHeaderHexDecimalPlaces);
+
+				//int index = await this.Provider.Interfaces.GetIndex(interfaceName);
+
+				//if (index != zeroBasedInterfaceIndex + 1)
+				//	throw new ProviderInfoException("zeroBasedInterfaceIndex do not mach (index=" + index + ", zeroBasedInterfaceIndex=" + zeroBasedInterfaceIndex +")");
+
+				//zeroBasedInterfaceIndex++;
 			}
-			
+
 			prtValues += "]";
 
-			vlanConfigSegments.Add(new Dictionary<string, string>() { { "vid", this.WebClient.ConvertInt32ToHexString(vlanId, vlanIdHexDecimalPlaces) },
-																	  { "nm", asciiVlanName },
-																	  { "prt", prtValues },
-																	  { "ivl", "0x00" } });
+			if (hasMbrKey)
+			{
+				vlanConfigSegments.Add(new Dictionary<string, string>() { { "nm", asciiVlanName },
+																	      { "mbr", this.WebClient.ConvertInt32ToHexString(vlanMemebers, vlanMembersDecimalPlaces) },
+																		  { "vid", this.WebClient.ConvertInt32ToHexString(vlanId, vlanIdHexDecimalPlaces) },
+																		  { "piso", "0x01" },
+																		  { "lrn", "0x01" },
+																		  { "mrr", "0x00" },
+																		  { "igmp", "0x00" },
+																		});
+			}
+			else
+			{
+				vlanConfigSegments.Add(new Dictionary<string, string>() { { "vid", this.WebClient.ConvertInt32ToHexString(vlanId, vlanIdHexDecimalPlaces) },
+																		  { "prt", prtValues },
+																		  { "ivl", "0x00" },
+																		  { "igmp", "0x00" },
+																		});
+			}
 
-			await this.SetName(vlanId, name);
+
+			//await this.SetName(vlanId, name);
+
 			//vlanConfigSegment = String.Format("vid:{0},prt:{1},ivl:0x00", NetworkDeviceProviderHelperMikroTik.ConvertInt32ToHexString(vlanId, 4), prtValues);
 			//this.WebControl.VlanConfigSegments.Add(vlanConfigSegment);
 
@@ -246,7 +306,7 @@ namespace NET.Tools.Providers
 			return vlanName;
         }
 
-        public override async ValueTask SetName(int vlanId, string name)
+        private async ValueTask SetName(int vlanId, string name)
         {
 			// Specific Vlan name cannot be set (no vlan naming on device).
 			//throw new ProviderInfoException("Set vlan name is not supported");

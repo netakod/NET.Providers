@@ -16,7 +16,7 @@ namespace NET.Tools.Providers
         }
 
         // TODO: I ovo promijeniti da se vlanovi dohvate iz konfe a ne iz 
-        public override async ValueTask<IEnumerable<VlanInfo>> GetVlans()
+        public override async ValueTask<IEnumerable<VlanInfo>> GetVlanInfos()
         {
 			//const string strVlan = "vlan";
 			//const string strName = "name";
@@ -72,7 +72,7 @@ namespace NET.Tools.Providers
             return result;
         }
 
-        public override async ValueTask Add(int vlanId, string name)
+        public override async ValueTask Set(int vlanId, string name)
         {
             // Set tagging throught the trunks
             IEnumerable<string> trunkGroupNames = await ProviderHelperHPProCurve.GetInterfaceTrunkGroupNames(this.Provider.Terminal);
@@ -126,15 +126,15 @@ namespace NET.Tools.Providers
             return name;
         }
 
-        public override async ValueTask SetName(int vlanId, string vlanName)
-        {
-            string hpVlanName = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim().Replace(' ', '_');
-			//string hpVlanName = "Vlan" + vlanId;
+   //     public override async ValueTask SetName(int vlanId, string vlanName)
+   //     {
+   //         string hpVlanName = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim().Replace(' ', '_');
+			////string hpVlanName = "Vlan" + vlanId;
 
-            await this.Provider.Terminal.EnterConfigModeAsync();
-            await this.Provider.Terminal.SendAsync("vlan " + vlanId);
-            await this.Provider.Terminal.SendAsync("name " + hpVlanName);
-            await this.Provider.Terminal.SendAsync("exit");
-        }
+   //         await this.Provider.Terminal.EnterConfigModeAsync();
+   //         await this.Provider.Terminal.SendAsync("vlan " + vlanId);
+   //         await this.Provider.Terminal.SendAsync("name " + hpVlanName);
+   //         await this.Provider.Terminal.SendAsync("exit");
+   //     }
     }
 }

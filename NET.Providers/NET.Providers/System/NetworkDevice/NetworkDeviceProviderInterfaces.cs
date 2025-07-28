@@ -70,7 +70,8 @@ namespace NET.Tools.Providers
 		public abstract ValueTask<bool> IsIpAddressSupported(string interfaceName);
 		public abstract ValueTask<bool> IsWriteIpAddressSupported(string interfaceName);
 		public abstract ValueTask<NetworkInfo> GetIpAddress(string interfaceName);
-		public abstract ValueTask SetIpAddress(string interfaceName, IpAddress ipAddress, int subnetMaskPrefix);
+		public abstract ValueTask SetIpAddress(string interfaceName, IpAddress? ipAddress, int subnetMaskPrefix);
+		public abstract ValueTask SetDhcpServer(string interfaceName, IpAddress? startIpAddress, IpAddress? endIpAddress, int subnetMaskPrefix, IpAddress? defaultGateway, IEnumerable<IpAddress> dnsServers, string domainName);
 		public abstract ValueTask<bool> IsSecondaryIpAddressSupported(string interfaceName);
 		public abstract ValueTask<IEnumerable<NetworkInfo>> GetSecondaryIpAddresses(string interfaceName);
 		public abstract ValueTask<bool> IsAddRemoveSecondaryIpAddressSupported(string interfaceName);

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Simple;
 using NET.Tools.Snmp;
+using Simple.Serialization;
 
 namespace NET.Tools.Providers
 {
@@ -36,7 +37,16 @@ namespace NET.Tools.Providers
             }
         }
 
-		public override ValueTask SetCommunity(string vlue) => throw new ProviderInfoException("SetCommunity is not implemented");
+        public override ValueTask SetCommunity(string vlue)
+        {
+            
+
+            // This is only temporary !!!!
+            return new ValueTask();
+            
+
+            //throw new ProviderInfoException("SetCommunity is not implemented");
+        }
 
 		public override ValueTask<IEnumerable<ApplyPasswordDestination>> SetPassword(string value) => throw new ProviderInfoException("SetPassword is not implemented");
 

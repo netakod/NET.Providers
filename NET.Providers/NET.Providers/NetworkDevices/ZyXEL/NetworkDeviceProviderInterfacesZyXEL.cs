@@ -24,7 +24,7 @@ namespace NET.Tools.Providers
 		private async ValueTask<IEnumerable<VlanInfo>> GetVlans()
 		{
 			if (this.vlans == null)
-				this.vlans = await this.Provider.Vlans.GetVlans();
+				this.vlans = await this.Provider.Vlans.GetVlanInfos();
 
 			return this.vlans;
 		}
@@ -112,7 +112,7 @@ namespace NET.Tools.Providers
             if (interfaceType == InterfaceOperationalType.Vlan)
             {
                 int vlanId = NetworkDeviceHelper.GetVlanIdFromVlanInterfaceName(interfaceName);
-                await this.Provider.Vlans.SetName(vlanId, zyxelDescription);
+                await ((NetworkDeviceProviderVlansZyXEL)this.Provider.Vlans).SetName(vlanId, zyxelDescription);
             }
             else if (interfaceType == InterfaceOperationalType.PhysicalPort)
             {

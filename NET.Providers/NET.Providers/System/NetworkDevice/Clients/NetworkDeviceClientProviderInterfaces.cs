@@ -125,9 +125,11 @@ namespace NET.Tools.Providers
 
 		public async ValueTask<TaskInfo> SetIpAddress(string interfaceName, IpAddress? ipAddress, int subnetMaskPrefix) => await this.SendRequestAsync(async () => await this.Interfaces.SetIpAddress(interfaceName, ipAddress, subnetMaskPrefix));
 
+		public async ValueTask<TaskInfo> SetDhcpServer(string interfaceName, IpAddress? startIpAddress, IpAddress? endIpAddress, int subnetMaskPrefix, IpAddress? defaultGateway, IEnumerable<IpAddress> dnsServers, string domainName) => await this.SendRequestAsync(async () => await this.Interfaces.SetDhcpServer(interfaceName, startIpAddress, endIpAddress, subnetMaskPrefix, defaultGateway, dnsServers, domainName));
+		
 		public async ValueTask<TaskInfo<bool>> IsSecondaryIpAddressSupported(string interfaceName) => await this.SendRequestAsync(async () => await this.Interfaces.IsSecondaryIpAddressSupported(interfaceName));
 
-		public async ValueTask<TaskInfo<IEnumerable<NetworkInfo>>> GetSecondaryIpAddresses(string interfaceName) => await this.SendRequestAsync(async () => await this.Interfaces.GetSecondaryIpAddresses(interfaceName));
+		public async ValueTask<TaskInfo<IEnumerable<NetworkInfo>?>> GetSecondaryIpAddresses(string interfaceName) => await this.SendRequestAsync(async () => await this.Interfaces.GetSecondaryIpAddresses(interfaceName));
 
 		public async ValueTask<TaskInfo<bool>> IsAddRemoveSecondaryIpAddressSupported(string interfaceName) => await this.SendRequestAsync(async () => await this.Interfaces.IsAddRemoveSecondaryIpAddressSupported(interfaceName));
 

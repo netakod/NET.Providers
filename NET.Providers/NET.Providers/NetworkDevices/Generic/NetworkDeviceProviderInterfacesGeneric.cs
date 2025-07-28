@@ -374,9 +374,9 @@ namespace NET.Tools.Providers
 
         public override async ValueTask<bool> IsIpAddressSupported(string interfaceName)
         {
-            NetworkInfo ipAddressInfo = await this.GetIpAddress(interfaceName);
+            NetworkInfo? ipAddressInfo = await this.GetIpAddress(interfaceName);
 
-            return ipAddressInfo.IpAddressText.Length > 0;
+            return ipAddressInfo?.IpAddressText.Length > 0;
         }
 
         public override ValueTask<bool> IsWriteIpAddressSupported(string interfaceName)
@@ -384,17 +384,17 @@ namespace NET.Tools.Providers
             return new ValueTask<bool>(false);   // Seting ip address via SNMP is not possible.
         }
 
-        public override async ValueTask<NetworkInfo?> GetIpAddress(string interfaceName)
+        public override async ValueTask<NetworkInfo> GetIpAddress(string interfaceName)
         {
             List<NetworkInfo> ipAddressInfoList = await this.GetIpAddresses(interfaceName);
 
-            return ipAddressInfoList.Count > 0 ? ipAddressInfoList[0] : null;
+            return ipAddressInfoList.Count > 0 ? ipAddressInfoList[0] : new NetworkInfo(String.Empty, 0);
         }
 
         public virtual async ValueTask<List<NetworkInfo>> GetIpAddresses(string interfaceName)
         {
             int interfaceIndex = await this.GetIndex(interfaceName);
-            List<NetworkInfo> ipAddressInfoList;
+            List<NetworkInfo>? ipAddressInfoList;
             List<NetworkInfo> resultList = new List<NetworkInfo>();
             var ipAddressListsByInterfaceIndex = await this.GetIpAddressListsByInterfaceIndex();
 
@@ -404,12 +404,12 @@ namespace NET.Tools.Providers
             return resultList;
         }
 
-        public override ValueTask SetIpAddress(string interfaceName, IpAddress ipAddress, int subnetMaskPrefix)
+        public override ValueTask SetIpAddress(string interfaceName, IpAddress? ipAddress, int subnetMaskPrefix)
         {
             throw new ProviderInfoException("Sets an IP Address is not suported.");
         }
 
-        public override ValueTask<bool> IsSecondaryIpAddressSupported(string interfaceName) => new ValueTask<bool>(true);
+		public override ValueTask<bool> IsSecondaryIpAddressSupported(string interfaceName) => new ValueTask<bool>(true);
 
         public override async ValueTask<IEnumerable<NetworkInfo>> GetSecondaryIpAddresses(string interfaceName)
         {
@@ -448,7 +448,7 @@ namespace NET.Tools.Providers
                 string ipAddress = ipAddrTable[i, 0].Value;
                 string ipSubnetMask = ipAddrTable[i, 2].Value;
 
-                List<NetworkInfo> ipAddressInfoList = null;
+                List<NetworkInfo>? ipAddressInfoList = null;
 
                 if (!this.ipAddressListsByInterfaceIndex.TryGetValue(interfaceIndex, out ipAddressInfoList))
                 {
@@ -464,30 +464,39 @@ namespace NET.Tools.Providers
             }
         }
 
-        #endregion |   Interface IP Addresses   |
+		#endregion |   Interface IP Addresses   |
 
-        #region |   Interface Vlans   |
+		#region |   Interface Services   |
 
-        //      public override bool IsVlanSupported(string interfaceName)
-        //      {
-        //	SnmpData snmpData;
+		public override ValueTask SetDhcpServer(string interfaceName, IpAddress? startIpAddress, IpAddress? endIpAddress, int subnetMaskPrefix, IpAddress? defaultGateway, IEnumerable<IpAddress> dnsServers, string domainName)
+		{
+			throw new ProviderInfoException("Sets a DHCP server is not suported.");
+		}
 
-        //	try
-        //	{
-        //		int interfaceIndex = this.GetIndex(interfaceName);
-        //		int dot1dBasePortIndex = this.GetDot1dBasePortIndex(interfaceIndex);
+		#endregion |   Interface Services   |
 
-        //		snmpData = this.Provider.Snmp.Get(SnmpOIDs.Vlans.dot1qPvid + "." + dot1dBasePortIndex);
-        //	}
-        //	catch
-        //	{
-        //		return this.GetSwitchportInfo(interfaceName).SwitchportMode != InterfaceSwitchportMode.VlanIsNotSupported;
-        //	}
+		#region |   Interface Vlans   |
 
-        //	return snmpData != null;
-        //}
+		//      public override bool IsVlanSupported(string interfaceName)
+		//      {
+		//	SnmpData snmpData;
 
-        public override async ValueTask<SwitchportInfo> GetSwitchportInfo(string interfaceName)
+		//	try
+		//	{
+		//		int interfaceIndex = this.GetIndex(interfaceName);
+		//		int dot1dBasePortIndex = this.GetDot1dBasePortIndex(interfaceIndex);
+
+		//		snmpData = this.Provider.Snmp.Get(SnmpOIDs.Vlans.dot1qPvid + "." + dot1dBasePortIndex);
+		//	}
+		//	catch
+		//	{
+		//		return this.GetSwitchportInfo(interfaceName).SwitchportMode != InterfaceSwitchportMode.VlanIsNotSupported;
+		//	}
+
+		//	return snmpData != null;
+		//}
+
+		public override async ValueTask<SwitchportInfo> GetSwitchportInfo(string interfaceName)
         {
             InterfaceSwitchportMode switchportMode = InterfaceSwitchportMode.VlanIsNotSupported;
             int vlanId = await this.GetVlanId(interfaceName);

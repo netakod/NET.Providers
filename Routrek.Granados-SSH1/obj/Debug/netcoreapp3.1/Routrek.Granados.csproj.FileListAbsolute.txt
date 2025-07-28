@@ -1,8 +1,0 @@
-D:\Wild Wind\Sources\Repos\Routrek.Granados\bin\Debug\netcoreapp3.1\Routrek.Granados.deps.json
-D:\Wild Wind\Sources\Repos\Routrek.Granados\bin\Debug\netcoreapp3.1\Routrek.Granados.dll
-D:\Wild Wind\Sources\Repos\Routrek.Granados\bin\Debug\netcoreapp3.1\Routrek.Granados.pdb
-D:\Wild Wind\Sources\Repos\Routrek.Granados\obj\Debug\netcoreapp3.1\Routrek.Granados.csproj.AssemblyReference.cache
-D:\Wild Wind\Sources\Repos\Routrek.Granados\obj\Debug\netcoreapp3.1\Routrek.Granados.GeneratedMSBuildEditorConfig.editorconfig
-D:\Wild Wind\Sources\Repos\Routrek.Granados\obj\Debug\netcoreapp3.1\Routrek.Granados.csproj.CoreCompileInputs.cache
-D:\Wild Wind\Sources\Repos\Routrek.Granados\obj\Debug\netcoreapp3.1\Routrek.Granados.dll
-D:\Wild Wind\Sources\Repos\Routrek.Granados\obj\Debug\netcoreapp3.1\Routrek.Granados.pdb

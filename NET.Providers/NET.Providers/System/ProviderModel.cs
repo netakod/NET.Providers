@@ -36,6 +36,7 @@ namespace NET.Tools.Providers
 	{
 		// Note that the index numbers are very important to be unique. They are set in datastore and uniquely specify device type cannot be changed during app lifecycle
 		public ModelElement Generic          = new ModelElement() { Index = (int)DeviceProviderType.Generic };
+		public ModelElement AristaEOS		 = new ModelElement() { Index = (int)DeviceProviderType.AristaEOS };
 		public ModelElement CiscoIOS         = new ModelElement() { Index = (int)DeviceProviderType.CiscoIOS };
 		public ModelElement Dell             = new ModelElement() { Index = (int)DeviceProviderType.Dell };
 		public ModelElement HPProCurve       = new ModelElement() { Index = (int)DeviceProviderType.HPProCurve,	    Caption = "HP ProCurve" };
@@ -66,30 +67,33 @@ namespace NET.Tools.Providers
 	{
 		Generic = 0,
 
-		[Description("Cisco IOS")]
-		CiscoIOS = 1,
+		[Description("Arista Networks EOS")]
+		AristaEOS = 1,
 
-		Dell = 2,
+		[Description("Cisco IOS")]
+		CiscoIOS = 2,
+
+		Dell = 3,
 
 		[Description("HP ProCurve")]
-		HPProCurve = 3,
+		HPProCurve = 4,
 
 		[Name("3Com")]
 		[Description("3Com")]
-		C3Com = 4,
+		C3Com = 5,
 
-		ZyXEL = 5,
+		ZyXEL = 6,
 
 		[Description("ZyXEL Web Managed")]
-		ZyXELWebManaged = 6,
+		ZyXELWebManaged = 7,
 
-		Linksys = 7,
+		Linksys = 8,
 
 		[Description("MikroTik SwOS")]
-		MikroTikSwOS = 8,
+		MikroTikSwOS = 9,
 
 		[Description("MikroTik RouterOS")]
-		MikroTikRouterOS = 9,
+		MikroTikRouterOS = 10,
 	}
 
 	public enum NetworkDeviceModule

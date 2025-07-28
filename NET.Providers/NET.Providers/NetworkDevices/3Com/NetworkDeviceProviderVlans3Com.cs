@@ -15,7 +15,7 @@ namespace NET.Tools.Providers
             return true;
         }
 
-        public override async ValueTask<IEnumerable<VlanInfo>> GetVlans()
+        public override async ValueTask<IEnumerable<VlanInfo>> GetVlanInfos()
         {
             const string strVlanId = "VLAN ID";
             const string strName = "Name";
@@ -50,7 +50,7 @@ namespace NET.Tools.Providers
             return result;
         }
 
-        public override async ValueTask Add(int vlanId, string name)
+        public override async ValueTask Set(int vlanId, string name)
         {
 			string newVlanName = name.IsNullOrEmpty() ? " " : name.Trim().Replace(' ', '_');
 			
@@ -88,13 +88,13 @@ namespace NET.Tools.Providers
             return name;
         }
 
-        public override async ValueTask SetName(int vlanId, string vlanName)
-        {
-            string newVlanName = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim().Replace(' ', '_');            
+        //public override async ValueTask SetName(int vlanId, string vlanName)
+        //{
+        //    string newVlanName = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim().Replace(' ', '_');            
             
-            await this.Provider.Terminal.SendAsync("vlan " + vlanId);
-            await this.Provider.Terminal.SendAsync("name " + newVlanName);
-            await this.Provider.Terminal.SendAsync("quit");
-        }
+        //    await this.Provider.Terminal.SendAsync("vlan " + vlanId);
+        //    await this.Provider.Terminal.SendAsync("name " + newVlanName);
+        //    await this.Provider.Terminal.SendAsync("quit");
+        //}
     }
 }

@@ -1543,7 +1543,7 @@ namespace NET.Tools.Terminal
 
 		private async ValueTask SendAsyncInternal(string text, CancellationToken cancellationToken = default)
 		{
-			System.Diagnostics.Debug.WriteLine("SENT: " + text);
+			//System.Diagnostics.Debug.WriteLine("SENT: " + text);
 
             if (text.Contains("[?1;0c"))
 			    await Task.Delay(1);
@@ -1644,7 +1644,7 @@ namespace NET.Tools.Terminal
             string textToSend = String.Empty;
             bool sendCrLf = true;
 
-            System.Diagnostics.Debug.WriteLine("RECEIVED: " + text);
+            //System.Diagnostics.Debug.WriteLine("RECEIVED: " + text);
 
 
             this.processedReceivedData += processedTerminalData;

@@ -302,7 +302,7 @@ namespace NET.Tools.Providers
 					this.trunkPortInterfaceNames.Remove(interfaceName);
 			}
 
-            IEnumerable<VlanInfo> vlanInfos = await this.Provider.Vlans.GetVlans();
+            IEnumerable<VlanInfo> vlanInfos = await this.Provider.Vlans.GetVlanInfos();
             int interfaceNumber = Conversion.TryChangeType<int>(interfaceName);
 
             // Set tagging for all vlans, preserving current port normal/untagged/tagged config

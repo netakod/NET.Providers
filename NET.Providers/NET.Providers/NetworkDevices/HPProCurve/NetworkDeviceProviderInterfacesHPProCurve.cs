@@ -88,12 +88,12 @@ namespace NET.Tools.Providers
 			//}
 			//else
 			//{
-            try
-            {
-                await base.SetDescription(interfaceName, description);
-            }
-            catch
-            {
+            //try
+            //{
+            //    await base.SetDescription(interfaceName, description);
+            //}
+            //catch
+            //{
 				string hpDescription = description.IsNullOrEmpty() ? " " : description.Trim().Replace(' ', '_');
 				int vlanId = NetworkDeviceHelper.GetVlanIdFromVlanInterfaceName(interfaceName);
 					
@@ -106,7 +106,7 @@ namespace NET.Tools.Providers
                     
 				await this.Provider.Terminal.SendAsync("name " + hpDescription);
                 await this.Provider.Terminal.SendAsync("exit");
-            }
+            //}
 			//}
         }
 
@@ -379,7 +379,7 @@ namespace NET.Tools.Providers
 
                                 if (setTrunkGroupThroughTheVlans)
                                 {
-									IEnumerable<VlanInfo> vlanInfos = await this.Provider.Vlans.GetVlans();
+									IEnumerable<VlanInfo> vlanInfos = await this.Provider.Vlans.GetVlanInfos();
                                     
                                     await this.Provider.Terminal.EnterConfigModeAsync();
 

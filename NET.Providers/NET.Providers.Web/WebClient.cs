@@ -397,8 +397,8 @@ namespace NET.Tools.Web
 		{
 			await Task.Delay(this.SendingInterval);
 
-			HttpWebRequest webRequest = await this.CreatePostRequestAsync(uriAction, refererAction, postData);
-			HttpWebResponse response = await webRequest.GetResponseAsync() as HttpWebResponse;
+			HttpWebRequest request = await this.CreatePostRequestAsync(uriAction, refererAction, postData);
+			HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
 
 			//var text = new StreamReader(response.GetResponseStream()).ReadToEnd();
 			return response;
@@ -408,11 +408,11 @@ namespace NET.Tools.Web
 
 		private async ValueTask<HttpWebRequest> CreateGetRequestAsync(string uriAction, string refererAction)
 		{
-			HttpWebRequest webRequest = await this.CreateRequestAsync(uriAction, refererAction, this.getContentType);
+			HttpWebRequest request = await this.CreateRequestAsync(uriAction, refererAction, this.getContentType);
 			
-			webRequest.Method = "GET";
+			request.Method = "GET";
 
-			return webRequest;
+			return request;
 		}
 
 		//private HttpWebRequest CreatePostRequest(string uriAction, string refererAction, string postData)
@@ -433,45 +433,45 @@ namespace NET.Tools.Web
 
 		private async ValueTask<HttpWebRequest> CreatePostRequestAsync(string uriAction, string refererAction, string postData)
 		{
-			HttpWebRequest webRequest = await this.CreateRequestAsync(uriAction, refererAction, this.postContentType);
-			webRequest.Method = "POST";
+			HttpWebRequest request = await this.CreateRequestAsync(uriAction, refererAction, this.postContentType);
+			request.Method = "POST";
 
 			byte[] dataBytes = ASCIIEncoding.ASCII.GetBytes(postData);
-			webRequest.ContentLength = dataBytes.Length;
+			request.ContentLength = dataBytes.Length;
 
 			await Task.Delay(this.SendingInterval);
 
-			using (Stream postStream = await webRequest.GetRequestStreamAsync())
+			using (Stream postStream = await request.GetRequestStreamAsync())
 				await postStream.WriteAsync(dataBytes, 0, dataBytes.Length);
 
-			return webRequest;
+			return request;
 		}
 
 		private async ValueTask<HttpWebRequest> CreateRequestAsync(string uriAction, string refererAction, string contentType)
 		{
 			string uri = String.Format("http://{0}/{1}", this.resolvedRemoteHost, uriAction);
-			HttpWebRequest webRequest = WebRequest.Create(uri) as HttpWebRequest;
+			HttpWebRequest request = WebRequest.Create(uri) as HttpWebRequest;
 			string referrerAction = (refererAction.IsNullOrEmpty()) ? this.defaultRefererAction : refererAction;
 
-			webRequest.Timeout = this.Timeout * 1000;
-			webRequest.KeepAlive = true;
-			webRequest.AllowAutoRedirect = false;
-			webRequest.ContentType = contentType;
-			webRequest.Referer = String.Format("http://{0}/{1}", this.resolvedRemoteHost, refererAction);
-			webRequest.UserAgent = this.userAgent;
-			webRequest.Credentials = this.CreateRequestCredentials();
-			webRequest.PreAuthenticate = true;
+			request.Timeout = this.Timeout * 1000;
+			request.KeepAlive = true;
+			request.AllowAutoRedirect = false;
+			request.ContentType = contentType;
+			request.Referer = String.Format("http://{0}/{1}", this.resolvedRemoteHost, refererAction);
+			request.UserAgent = this.userAgent;
+			request.Credentials = this.CreateRequestCredentials();
+			request.PreAuthenticate = true;
 
 			if (this.UseProxy)
 			{
-				webRequest.Proxy = new WebProxy(this.Proxy, this.ProxyPort);
+				request.Proxy = new WebProxy(this.Proxy, this.ProxyPort);
 
 				if (!this.ProxyUsername.IsNullOrEmpty())
-					webRequest.Proxy.Credentials = new NetworkCredential(this.ProxyUsername, this.ProxyPassword);
+					request.Proxy.Credentials = new NetworkCredential(this.ProxyUsername, this.ProxyPassword);
 			}
 			else
 			{
-				webRequest.Proxy = null;
+				request.Proxy = null;
 			}
 
 			if (this.ConnectionMethod == WebRequestMethod.POST && this.cookie == null && !this.isPostAuthorisationAttempted)
@@ -480,15 +480,15 @@ namespace NET.Tools.Web
 				await this.ConnectAsync();
 			}
 
-			this.OnCreateRequest(webRequest);
+			this.OnCreateRequest(request);
 
 			if (this.cookie != null)
 			{
-				webRequest.CookieContainer = new CookieContainer();
-				webRequest.CookieContainer.Add(this.cookie);
+				request.CookieContainer = new CookieContainer();
+				request.CookieContainer.Add(this.cookie);
 			}
 
-			return webRequest;
+			return request;
 		}
 
 		protected virtual void OnCreateRequest(HttpWebRequest webRequest) { }

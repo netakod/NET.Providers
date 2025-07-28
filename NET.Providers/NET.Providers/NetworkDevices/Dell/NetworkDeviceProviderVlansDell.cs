@@ -15,7 +15,7 @@ namespace NET.Tools.Providers
             return true;
         }
 
-        public override async ValueTask<IEnumerable<VlanInfo>> GetVlans()
+        public override async ValueTask<IEnumerable<VlanInfo>> GetVlanInfos()
         {
             //const string strVlan = "vlan";
             //const string strName = "Name";
@@ -98,7 +98,7 @@ namespace NET.Tools.Providers
             return result;
         }
 
-        public override async ValueTask Add(int vlanId, string name)
+        public override async ValueTask Set(int vlanId, string name)
         {
 			string newName = name.IsNullOrEmpty() ? " " : name.Replace(' ', '_');
 			DellDeviceType dellDeviceType = await (this.Provider.Terminal as TerminalClientDell).GetDellDeviceType();
@@ -205,43 +205,43 @@ namespace NET.Tools.Providers
             return name;
         }
 
-        public override async ValueTask SetName(int vlanId, string vlanName)
-        {
-			//string newVlanName = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim().Replace(' ', '_');
+   //     public override async ValueTask SetName(int vlanId, string vlanName)
+   //     {
+			////string newVlanName = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim().Replace(' ', '_');
 
-			//if (newVlanName.ToLower() == "vlan" + vlanId)
+			////if (newVlanName.ToLower() == "vlan" + vlanId)
+			////{
+			////    newVlanName += "_";
+			////}
+
+			//DellDeviceType dellDeviceType = await (this.Provider.Terminal as TerminalClientDell).GetDellDeviceType();
+
+			//await this.Provider.Terminal.EnterConfigModeAsync();
+
+			//if (dellDeviceType == DellDeviceType.DellNetworkingNxxxx)
 			//{
-			//    newVlanName += "_";
+			//	await this.Provider.Terminal.SendAsync("vlan " + vlanId);
+			//}
+			//else
+			//{
+			//	await this.Provider.Terminal.SendAsync("interface vlan " + vlanId);
 			//}
 
-			DellDeviceType dellDeviceType = await (this.Provider.Terminal as TerminalClientDell).GetDellDeviceType();
+			//string response = await this.Provider.Terminal.SendAsync("name \"" + vlanName + "\"");
 
-			await this.Provider.Terminal.EnterConfigModeAsync();
+			//if (response.ToLower().Contains("wrong"))
+   //         {
+   //             response = await this.Provider.Terminal.SendAsync("name \"" + vlanName + "\"");
 
-			if (dellDeviceType == DellDeviceType.DellNetworkingNxxxx)
-			{
-				await this.Provider.Terminal.SendAsync("vlan " + vlanId);
-			}
-			else
-			{
-				await this.Provider.Terminal.SendAsync("interface vlan " + vlanId);
-			}
-
-			string response = await this.Provider.Terminal.SendAsync("name \"" + vlanName + "\"");
-
-			if (response.ToLower().Contains("wrong"))
-            {
-                response = await this.Provider.Terminal.SendAsync("name \"" + vlanName + "\"");
-
-				if (!response.IsNullOrEmpty())
-				{
-					await this.Provider.Terminal.SendAsync("exit");
+			//	if (!response.IsNullOrEmpty())
+			//	{
+			//		await this.Provider.Terminal.SendAsync("exit");
 					
-                    throw new ProviderInfoException("Set VLAN name has failed: " + response);
-				}
-            }
+   //                 throw new ProviderInfoException("Set VLAN name has failed: " + response);
+			//	}
+   //         }
 
-            await this.Provider.Terminal.SendAsync("exit");
-        }
+   //         await this.Provider.Terminal.SendAsync("exit");
+   //     }
     }
 }

@@ -156,13 +156,9 @@ namespace NET.Tools.Providers
 			ulong interfaceMask = (ulong)1 << zeroBasedInterfaceIndex;
 
 			if (adminStatus != InterfaceAdminStatus.Down)
-			{
 				en |= interfaceMask; // en OR interfaceMask -> Set bit interface position to 1
-			}
 			else
-			{
 				en &= ~interfaceMask; // en AND (NOT interfaceMask) -> Set bit interface position to 0
-			}
 
 			linkDictionary["en"] = this.WebClient.ConvertUInt64ToHexString(en, enValueText); // (enValueText.Length == 10) ? this.WebClient.ConvertUInt64ToHexString(en, 8) : this.WebClient.ConvertUInt64ToHexString(en);
 
@@ -276,7 +272,7 @@ namespace NET.Tools.Providers
 					vlanReceiveValues[zeroBasedInterfaceIndex] = this.WebClient.ConvertInt32ToHexString((int)vlanReceive, oldHexValueText: vlanReceiveHexValueText);
 					dvidDictionary["vlni"] = String.Format("[{0}]", this.WebClient.CreateMultipleValueText(vlanReceiveValues));
 
-					// Gets VLAN Header from "vlnh:[0x02,0x01,0x01,0x00,0x00,0x00]" ->newer SwOS has no header value support
+					// Gets VLAN Header from "vlnh:[0x02,0x01,0x01,0x00,0x00,0x00]" -> newer SwOS has no header value support
 					if (dvidDictionary.ContainsKey("vlnh"))
 					{
 						string vlanHeaderValueText = dvidDictionary["vlnh"];
@@ -360,7 +356,7 @@ namespace NET.Tools.Providers
 			return vlanId;
 		}
 
-		protected async ValueTask SetSwitchportPolicy(int zeroBasedInterfaceIndex, InterfaceSwitchportMode switchportMode, int vlanId)
+		internal protected async ValueTask SetSwitchportPolicy(int zeroBasedInterfaceIndex, InterfaceSwitchportMode switchportMode, int vlanId)
 		{
 			//List<string> trunkPortNames = (this.Provider.Interfaces as NetworkDeviceProviderInterfacesMikroTikSwOS).TrunkPortInterfaceNames;
 			//IEnumerable<string> interfaceNames = this.Provider.Interfaces.GetInterfaces().Select(item => item.InterfaceName);
@@ -370,9 +366,9 @@ namespace NET.Tools.Providers
 			//for (int i = 0; i < this.WebControl.VlanConfigSegments.Count; i++)
 			var vlanConfigSegments = await this.WebClient.GetVlanConfigSegments();
 
-			if (vlanConfigSegments.Count > 0 && vlanConfigSegments[0].ContainsKey("prt")) // for old Mikrotik SwOS images
+			foreach (var keyValuePairs in vlanConfigSegments)
 			{
-				foreach (var keyValuePairs in vlanConfigSegments)
+				if (keyValuePairs.ContainsKey("prt")) // for old Mikrotik SwOS images
 				{
 					MikroTikVlanHeader switchportPolicy = MikroTikVlanHeader.LeaveAsIs;
 					//string vlanSegment = this.WebControl.VlanConfigSegments[i];
@@ -395,10 +391,20 @@ namespace NET.Tools.Providers
 
 					//this.WebControl.VlanConfigSegments[i] = keyValuePairs.ToConfigLine();
 				}
-			}
-			else
-			{
+				else if (keyValuePairs.ContainsKey("mbr"))
+				{
+					int currentVlanId = this.WebClient.ConvertHexStringToInt32(keyValuePairs["vid"]);
+					ulong portPositionMask = (ulong)1 << zeroBasedInterfaceIndex;
+					string mbrValuesText = keyValuePairs["mbr"];
+					ulong mbrPortHexValue = this.WebClient.ConvertHexStringToUInt64(mbrValuesText);
 
+					if (currentVlanId == vlanId || switchportMode == InterfaceSwitchportMode.Trunk) // Trank port is member of all vlans
+						mbrPortHexValue |= portPositionMask; // Set port to 1
+					else
+						mbrPortHexValue &= ~portPositionMask; // Unset this port
+						
+					keyValuePairs["mbr"] = this.WebClient.ConvertUInt64ToHexString(mbrPortHexValue, oldHexValueText: mbrValuesText);
+				}
 			}
 
 			//string postData = NetworkDeviceProviderHelperMikroTik.CreateConfigTextFromConfigSegments(this.WebControl.VlanConfigSegments);

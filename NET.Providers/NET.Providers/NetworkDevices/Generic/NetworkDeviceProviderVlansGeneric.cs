@@ -18,7 +18,7 @@ namespace NET.Tools.Providers
             return true;
         }
 
-        public override async ValueTask<IEnumerable<VlanInfo>> GetVlans()
+        public override async ValueTask<IEnumerable<VlanInfo>> GetVlanInfos()
         {
             List<VlanInfo> result = new List<VlanInfo>();
 
@@ -50,12 +50,16 @@ namespace NET.Tools.Providers
             return result;
         }
 
-        public override async ValueTask Add(int vlanId, string name)
+        public override async ValueTask Set(int vlanId, string name)
         {
             bool isSet = await this.Provider.Snmp.SetAsync(SnmpOIDs.Vlans.dot1qVlanStaticRowStatus + "." + vlanId, Convert.ToInt32(VlanStaticRowStatus.CreateAndGo));
-			await this.SetName(vlanId, name);
-			//if (!isSet.Succeed)
-			//	throw new ProviderInfoException(isSet.Message);
+			
+			if (isSet)
+			{
+				string nameToSet = name.IsNullOrEmpty() ? " " : name.Trim().Replace(' ', '_');
+
+				isSet = await this.Provider.Snmp.SetAsync(SnmpOIDs.Vlans.dot1qVlanStaticName + "." + vlanId, nameToSet);
+			}
 		}
 
 		public override async ValueTask Remove(int vlanId)
@@ -82,13 +86,13 @@ namespace NET.Tools.Providers
 			//}
         }
 
-        public override async ValueTask SetName(int vlanId, string vlanName)
-        {
-            string valueToSet = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim().Replace(' ', '_');
-			bool isSet = await this.Provider.Snmp.SetAsync(SnmpOIDs.Vlans.dot1qVlanStaticName + "." + vlanId, valueToSet);
+  //      public override async ValueTask SetName(int vlanId, string vlanName)
+  //      {
+  //          string valueToSet = vlanName.IsNullOrEmpty() ? " " : vlanName.Trim().Replace(' ', '_');
+		//	bool isSet = await this.Provider.Snmp.SetAsync(SnmpOIDs.Vlans.dot1qVlanStaticName + "." + vlanId, valueToSet);
 
-			//if (!isSet)
-			//	throw new ProviderInfoException(result.Message);
-		}
+		//	//if (!isSet)
+		//	//	throw new ProviderInfoException(result.Message);
+		//}
 	}
 }

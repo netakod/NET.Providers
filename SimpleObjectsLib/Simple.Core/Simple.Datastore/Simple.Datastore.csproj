@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0; netstandard2.1</TargetFrameworks>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.OleDb" Version="4.7.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Simple.Modeling\Simple.Modeling.csproj" />
+    <ProjectReference Include="..\Simple.Serialization\Simple.Serialization.csproj" />
+    <ProjectReference Include="..\Simple\Simple.csproj" />
+  </ItemGroup>
+
+</Project>

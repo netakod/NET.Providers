@@ -4,7 +4,7 @@
     <RootNamespace>Lextm.SharpSnmpLib</RootNamespace>
     <UseWPF>false</UseWPF>
     <UseWindowsForms>false</UseWindowsForms>
-    <TargetFrameworks Condition="'$(MSBuildAssemblyVersion)' == '17.0' ">net6.0; netstandard2.1; net48</TargetFrameworks>
+    <TargetFrameworks Condition="'$(MSBuildAssemblyVersion)' == '17.0' ">net8.0; netstandard2.1; net481</TargetFrameworks>
     <TargetFrameworks Condition="'$(MSBuildAssemblyVersion)' == '16.0' ">net6.0; netstandard2.0; net471</TargetFrameworks>
     <PackageId>Lextm.SharpSnmpLib</PackageId>
     <Title>#SNMP Library</Title>
@@ -22,7 +22,7 @@
     <PackageReleaseNotes>https://github.com/lextudio/sharpsnmplib/releases</PackageReleaseNotes>
     <Copyright>Copyright (c) 2008-2022 Malcolm Crowe, Lex Li, and other contributors.</Copyright>
     <PackageTags>smi snmp mib</PackageTags>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>sharpsnmplib.snk</AssemblyOriginatorKeyFile>
     <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
     <AssemblyVersion>12.5.0.0</AssemblyVersion>

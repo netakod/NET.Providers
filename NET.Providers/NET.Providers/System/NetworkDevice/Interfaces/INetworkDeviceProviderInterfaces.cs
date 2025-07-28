@@ -73,6 +73,7 @@ namespace NET.Tools.Providers
 		ValueTask<bool> IsWriteIpAddressSupported(string interfaceName);
 		ValueTask<NetworkInfo> GetIpAddress(string interfaceName);
 		ValueTask SetIpAddress(string interfaceName, IpAddress? ipAddress, int subnetMaskPrefix);
+		ValueTask SetDhcpServer(string interfaceName, IpAddress? startIpAddress, IpAddress? endIpAddress, int subnetMaskPrefix, IpAddress? defaultGateway, IEnumerable<IpAddress> dnsServers, string domainName);
 		ValueTask<bool> IsSecondaryIpAddressSupported(string interfaceName);
 		ValueTask<IEnumerable<NetworkInfo>> GetSecondaryIpAddresses(string interfaceName);
 		ValueTask<bool> IsAddRemoveSecondaryIpAddressSupported(string interfaceName);

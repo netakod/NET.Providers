@@ -9,11 +9,10 @@ namespace NET.Tools.Providers
 	[NetworkDeviceModuleType(NetworkDeviceModule.Vlans)]
 	public interface INetworkDeviceProviderVlans : IDisposable
 	{
-		ValueTask<IEnumerable<VlanInfo>> GetVlans();
+		ValueTask<IEnumerable<VlanInfo>> GetVlanInfos();
 		bool IsVlanSupported();
-		ValueTask Add(int vlanId, string name);
+		ValueTask Set(int vlanId, string name);
 		ValueTask Remove(int vlanId);
 		ValueTask<string> GetName(int vlanId);
-		ValueTask SetName(int vlanId, string vlanName);
 	}
 }

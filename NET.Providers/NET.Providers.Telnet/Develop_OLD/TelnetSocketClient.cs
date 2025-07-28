@@ -212,7 +212,7 @@ namespace NET.Tools.Telnet_DevelopOld
 			{
 				int bytesRead = this.socket.EndReceive(result); // Read data from the client socket.
 
-				this.Print("RECEIVED: ", this.receiveBuffer, bytesRead);
+				//this.Print("RECEIVED: ", this.receiveBuffer, bytesRead);
 
 
 				if (bytesRead > 0)

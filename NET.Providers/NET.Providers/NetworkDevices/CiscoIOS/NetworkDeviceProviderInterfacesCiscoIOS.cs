@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Simple;
@@ -23,67 +25,76 @@ namespace NET.Tools.Providers
 
         public override async ValueTask SetDescription(string interfaceName, string description)
         {
-            try
-            {
-                await base.SetDescription(interfaceName, description);
-            }
-            catch
-            {
+            //string result;
+            //try
+            //{
+                //await base.SetDescription(interfaceName, description);
+            //}
+            //catch
+            //{
                 string ciscoDescription = description.IsNullOrEmpty() ? " " : description.Replace(' ', '_');
 
                 await this.Provider.Terminal.EnterConfigModeAsync();
-                await this.Provider.Terminal.SendAsync("interface " + interfaceName);
-                await this.Provider.Terminal.SendAsync("description " + ciscoDescription);
-                await this.Provider.Terminal.SendAsync("exit");
-            }
-        }
+                
+                string response = await this.Provider.Terminal.SendAsync("interface " + interfaceName);
+                
+              
+            if (response.ToLower().Contains("invalid"))
+				throw new ProviderInfoException(String.Format("Interface {0} is not configurable or does not exists.", interfaceName));
+
+			await this.Provider.Terminal.SendAsync("description " + ciscoDescription);
+			await this.Provider.Terminal.SendAsync("exit");
+
+			//}
+		}
 
         public override async ValueTask SetAdminStatus(string interfaceName, InterfaceAdminStatus adminStatus)
         {
-            try
-            {
-                await base.SetAdminStatus(interfaceName, adminStatus);
-            }
-            catch
-            {
-                await this.Provider.Terminal.EnterConfigModeAsync();
+            //try
+            //{
+            //    await base.SetAdminStatus(interfaceName, adminStatus);
+            //}
+            //catch
+            //{
+            await this.Provider.Terminal.EnterConfigModeAsync();
                 
-                string response = await this.Provider.Terminal.SendAsync("interface " + interfaceName);
+            string response = await this.Provider.Terminal.SendAsync("interface " + interfaceName);
 
-                if (!response.ToLower().Contains("invalid"))
-                {
-					if (!interfaceName.ToLower().StartsWith("vlan")) // there is no shutdown command on vlan interfaces
-					{
-						string adminStatusCommand = "shutdown";
+            if (response.ToLower().Contains("invalid"))
+				throw new ProviderInfoException(String.Format("Error on set Admin Status: {0}", response));
 
-						if (adminStatus == InterfaceAdminStatus.Up)
-							adminStatusCommand = "no " + adminStatusCommand;
+			//if (interfaceName.ToLower().StartsWith("vlan")) // there is no shutdown command on vlan interfaces
+			//{
+			string adminStatusCommand = "shutdown";
 
-						response = await this.Provider.Terminal.SendAsync(adminStatusCommand);
-						           await this.Provider.Terminal.SendAsync("exit");
+				if (adminStatus != InterfaceAdminStatus.Down)
+					adminStatusCommand = "no " + adminStatusCommand;
 
-						if (response.ToLower().Contains("invalid"))
-							throw new ProviderInfoException(String.Format("Error on set Admin Status: {0}\r\n{1}", adminStatusCommand, response));
-					}
-                }
-                else
-                {
-                    throw new ProviderInfoException(String.Format("Error on set Admin Status: {0}", response));
-                }
-            }
-        }
+				response = await this.Provider.Terminal.SendAsync(adminStatusCommand);
 
-        #endregion |   Interface Data   |
+			//if (response.ToLower().Contains("invalid"))
+			//	throw new ProviderInfoException(String.Format("Error on set Admin Status: {0}\r\n{1}", adminStatusCommand, response));
+			//}
 
-        #region |   Add Remove Interface   |
+			await this.Provider.Terminal.SendAsync("exit");
+			//}
+		}
 
-        public override bool IsAddRemoveSupported() => true;
+		#endregion |   Interface Data   |
+
+		#region |   Add Remove Interface   |
+
+		public override bool IsAddRemoveSupported() => true;
 
         public override async ValueTask Add(string interfaceName)
         {
             await this.Provider.Terminal.EnterConfigModeAsync();
-            await this.Provider.Terminal.SendAsync("interface " + interfaceName);
-            await this.Provider.Terminal.SendAsync("no shutdown");
+            string response = await this.Provider.Terminal.SendAsync("interface " + interfaceName);
+
+            if (response.ToLower().Contains("invalid"))
+				throw new ProviderInfoException(String.Format("Interface {0} does not exists: \r\n{1}", interfaceName, response)); // interface does not exists, just return
+
+			await this.Provider.Terminal.SendAsync("no shutdown");
             await this.Provider.Terminal.SendAsync("exit");
 
             await this.GenerateInterfaceDictionary();
@@ -96,7 +107,6 @@ namespace NET.Tools.Providers
             //response = this.Provider.Connection.Terminal.Send("shutdown");
             //response = this.Provider.Connection.Terminal.Send("exit");
             await this.Provider.Terminal.SendAsync("no interface " + interfaceName);
-            
             await this.GenerateInterfaceDictionary();
         }
 
@@ -126,39 +136,43 @@ namespace NET.Tools.Providers
         public override async ValueTask<bool> IsSecondaryIpAddressSupported(string interfaceName) => await this.IsIpAddressSupported(interfaceName);
 
 
-        public override async ValueTask<NetworkInfo?> GetIpAddress(string interfaceName)
+        public override async ValueTask<NetworkInfo> GetIpAddress(string interfaceName)
         {
-            //try
-            //{
-            //    return base.GetIpAddress(interfaceName);
-            //}
-            //catch
-            //{
-            NetworkInfo? result = null; // new NetworkInfo("", "");
+            string response;
+			//try
+			//{
+			//    return base.GetIpAddress(interfaceName);
+			//}
+			//catch
+			//{
+			NetworkInfo result; // new NetworkInfo("", "");
 
             await this.Provider.Terminal.ExitConfigModeAsync();
-            string response = await this.Provider.Terminal.SendAsync("sh ip int " + interfaceName + " | in Internet addre");
+            response = await this.Provider.Terminal.SendAsync("sh ip int " + interfaceName + " | in Internet addre");
 
-            if (response.ToLower().Contains("invalid input"))
-                return result;
-
+			if (response.ToLower().Contains("invalid"))
+				throw new ProviderInfoException(String.Format("Interface {0} does not exists: \r\n{1}", interfaceName, response)); // interface does not exists, just return
+			
             try
-            {
+			{
                 if (response.Contains("address"))
                 {
                     string[] responseArray = response.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                     string[] ipAddressAndMaskBits = responseArray[responseArray.Length - 1].Split('/');
-
-                    result.IpAddressText = ipAddressAndMaskBits[0].Trim();
-                        
+                    string ipAddressText = ipAddressAndMaskBits[0].Trim();
                     int ipSubnetMaskNumOfBits = Conversion.TryChangeType<int>(ipAddressAndMaskBits[1]);
-                        
-                    result.SubnetMask = IpHelper.GetSubnetMask(ipSubnetMaskNumOfBits);
+                    string subnetMask = IpHelper.GetSubnetMask(ipSubnetMaskNumOfBits);
+
+                    result = new NetworkInfo(ipAddressText, subnetMask);
                 }
-            }
+				else
+				{
+					result = new NetworkInfo("", 0);
+				}
+			}
             catch
             {
-                //result = new NetworkInfo("", "");
+                result = new NetworkInfo("", 0);
             }
 
             return result;
@@ -167,38 +181,35 @@ namespace NET.Tools.Providers
 
         public override async ValueTask SetIpAddress(string interfaceName, IpAddress? ipAddress, int subnetMaskPrefix)
         {
-            if (ipAddress != null)
-            {
-                await this.Provider.Terminal.EnterConfigModeAsync();
-                await this.Provider.Terminal.SendAsync("interface " + interfaceName);
-                await this.Provider.Terminal.SendAsync("ip address " + ipAddress.ToString() + " " + IpHelper.GetSubnetMask(subnetMaskPrefix));
-                await this.Provider.Terminal.SendAsync("exit");
-            }
+            string response;
+
+			await this.Provider.Terminal.EnterConfigModeAsync();
+			response = await this.Provider.Terminal.SendAsync("interface " + interfaceName);
+
+			if (response.ToLower().Contains("invalid"))
+				throw new ProviderInfoException(String.Format("Interface {0} does not exists: \r\n{1}", interfaceName, response)); // interface does not exists, just return
+
+			string ipAddressCommand = "ip address";
+
+			if (ipAddress != null)
+                 await this.Provider.Terminal.SendAsync(ipAddressCommand + " " + ipAddress.ToString() + " " + IpHelper.GetSubnetMask(subnetMaskPrefix));
             else    // no ip address to set - remove existing
-            {
-                NetworkInfo? oldIpAddressInfo = await this.GetIpAddress(interfaceName);
+				await this.Provider.Terminal.SendAsync("no " + ipAddressCommand);
 
-                if (oldIpAddressInfo != null && oldIpAddressInfo.IpAddressText.Trim().Length > 0 && oldIpAddressInfo.SubnetMask.Trim().Length > 0)
-                {
-                    await this.Provider.Terminal.EnterConfigModeAsync();
-                    await this.Provider.Terminal.SendAsync("interface " + interfaceName);
-                    await this.Provider.Terminal.SendAsync("no ip address " + oldIpAddressInfo.IpAddressText + " " + oldIpAddressInfo.SubnetMask);
-                    await this.Provider.Terminal.SendAsync("exit");
-                }
-            }
-        }
+			await this.Provider.Terminal.SendAsync("exit");
+		}
 
-        public override async ValueTask<IEnumerable<NetworkInfo>> GetSecondaryIpAddresses(string interfaceName)
+		public override async ValueTask<IEnumerable<NetworkInfo>> GetSecondaryIpAddresses(string interfaceName)
         {
             List<NetworkInfo> result = new List<NetworkInfo>();
 
                               await this.Provider.Terminal.ExitConfigModeAsync();
             string response = await this.Provider.Terminal.SendAsync("sh ip int " + interfaceName + " | in Secondary addre");
 
-            if (response.ToLower().Contains("invalid input"))
-                return result;
-            
-            if (response.Contains("address"))
+            if (response.ToLower().Contains("invalid"))
+				throw new ProviderInfoException(String.Format("Interface {0} does not exists: {1}", interfaceName, response));
+
+			if (response.Contains("address"))
             {
                 string[] responseArray = response.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 
@@ -227,189 +238,233 @@ namespace NET.Tools.Providers
 
         public override async ValueTask AddSecondaryIpAddress(string interfaceName, IpAddress ipAddress, int subnetMaskPrefix)
         {
+            string response;
             //if (ipAddress() != "" && subnetMaskPrefix.Trim() != "")
             //{
                 await this.Provider.Terminal.EnterConfigModeAsync();
-                await this.Provider.Terminal.SendAsync("interface " + interfaceName);
-                await this.Provider.Terminal.SendAsync("ip address " + ipAddress.ToString() + " " + IpHelper.GetSubnetMask(subnetMaskPrefix) + " secondary");
-                await this.Provider.Terminal.SendAsync("exit");
-            //}
-        }
+                response = await this.Provider.Terminal.SendAsync("interface " + interfaceName);
+
+			if (response.ToLower().Contains("invalid"))
+				throw new ProviderInfoException(String.Format("Interface {0} does not exists: \r\n{1}", interfaceName, response)); // interface does not exists, just return
+
+            await this.Provider.Terminal.SendAsync("ip address " + ipAddress.ToString() + " " + IpHelper.GetSubnetMask(subnetMaskPrefix) + " secondary");
+            await this.Provider.Terminal.SendAsync("exit");
+			//}
+		}
 
         public override async ValueTask RemoveSecondaryIpAddress(string interfaceName, IpAddress ipAddress, int subnetMaskPrefix)
         {
+            string response;
             //if (ipAddress.Trim() != "" && subnetMaskPrefix.Trim() != "")
             //{
-                await this.Provider.Terminal.EnterConfigModeAsync();
-                await this.Provider.Terminal.SendAsync("interface " + interfaceName);
-                await this.Provider.Terminal.SendAsync("no ip address " + ipAddress.ToString() + " " + IpHelper.GetSubnetMask(subnetMaskPrefix) + " secondary");
-                await this.Provider.Terminal.SendAsync("exit");
-            //}
-        }
+            await this.Provider.Terminal.EnterConfigModeAsync();
+            response = await this.Provider.Terminal.SendAsync("interface " + interfaceName);
 
-        //[ProviderAction("IPAddresses.GetKeys")]
-        //public ProviderKeys GetIpAddressKeysByTerminal(string interfaceName)
-        //{
-        //    ProviderKeys keys = new ProviderKeys(ProviderKeyHelper.KeyNamesIPAddress);
+			if (response.ToLower().Contains("invalid"))
+				throw new ProviderInfoException(String.Format("Interface {0} does not exists: \r\n{1}", interfaceName, response)); // interface does not exists, just return
 
-        //    IPAddressInfo primaryIpAddress = this.GetPrimaryIpAddress(interfaceName);
+            await this.Provider.Terminal.SendAsync("no ip address " + ipAddress.ToString() + " " + IpHelper.GetSubnetMask(subnetMaskPrefix) + " secondary");
+            await this.Provider.Terminal.SendAsync("exit");
+		}
 
-        //    if (primaryIpAddress != null)
-        //    {
-        //        keys.AddKeyValue(ProviderKeyHelper.CreateIPAddressKey(primaryIpAddress.IPAddress, primaryIpAddress.IPSubnetMask));
+		//[ProviderAction("IPAddresses.GetKeys")]
+		//public ProviderKeys GetIpAddressKeysByTerminal(string interfaceName)
+		//{
+		//    ProviderKeys keys = new ProviderKeys(ProviderKeyHelper.KeyNamesIPAddress);
 
-        //        IPAddressInfo[] secondaryIpAddresses = this.GetSecondaryIpAddresses(interfaceName);
+		//    IPAddressInfo primaryIpAddress = this.GetPrimaryIpAddress(interfaceName);
 
-        //        foreach (IPAddressInfo secondaryIpAddressInfo in secondaryIpAddresses)
-        //        {
-        //            keys.AddKeyValue(ProviderKeyHelper.CreateIPAddressKey(secondaryIpAddressInfo.IPAddress, secondaryIpAddressInfo.IPSubnetMask));
-        //        }
-        //    }
+		//    if (primaryIpAddress != null)
+		//    {
+		//        keys.AddKeyValue(ProviderKeyHelper.CreateIPAddressKey(primaryIpAddress.IPAddress, primaryIpAddress.IPSubnetMask));
 
-        //    return keys;
-        //}
+		//        IPAddressInfo[] secondaryIpAddresses = this.GetSecondaryIpAddresses(interfaceName);
 
-        //[ProviderAction("IPAddresses.Add")]
-        //public void AddIPAddress(string interfaceName, string ipAddress, string ipSubnetMask)
-        //{
-        //    string lineCmd = "ip address " + ipAddress + " " + ipSubnetMask;
+		//        foreach (IPAddressInfo secondaryIpAddressInfo in secondaryIpAddresses)
+		//        {
+		//            keys.AddKeyValue(ProviderKeyHelper.CreateIPAddressKey(secondaryIpAddressInfo.IPAddress, secondaryIpAddressInfo.IPSubnetMask));
+		//        }
+		//    }
 
-        //    if (this.GetPrimaryIpAddress(interfaceName) != null)
-        //    {
-        //        lineCmd += " secondary";
-        //    }
+		//    return keys;
+		//}
 
-        //    this.Terminal.EnterConfigMode();
+		//[ProviderAction("IPAddresses.Add")]
+		//public void AddIPAddress(string interfaceName, string ipAddress, string ipSubnetMask)
+		//{
+		//    string lineCmd = "ip address " + ipAddress + " " + ipSubnetMask;
 
-        //    string response = this.Terminal.SendSync("interface " + interfaceName);
-        //    response = this.Terminal.SendSync(lineCmd);
-        //    response = this.Terminal.SendSync("exit");
-        //}
+		//    if (this.GetPrimaryIpAddress(interfaceName) != null)
+		//    {
+		//        lineCmd += " secondary";
+		//    }
 
-        ///// <summary>
-        ///// Remove primary or secondary ip address/mask. If secondary ip address exist and primary address needs to be removed, 
-        ///// firs we must remove all secondary ip addresses, than to remove primary and finally restore secondary ip addresses
-        ///// positioning first one as primary.
-        ///// </summary>
-        ///// <param name="interfaceName">The name of the interface.</param>
-        ///// <param name="ipAddress">IP address.</param>
-        ///// <param name="ipSubnetMask">IP subnet mask.</param>
-        //[ProviderAction("IPAddresses.Remove")]
-        //public void RemoveIPAddress(string interfaceName, string ipAddress, string ipSubnetMask)
-        //{
-        //    string response;
-            
-        //    if (this.IsPrimaryIpAddress(interfaceName, ipAddress, ipSubnetMask))
-        //    {
-        //        // If secondary ip address exist and primary address needs to be removed, firs we must remove all secondary ip addresses,
-        //        // than to remove primary and finally restore secondary ip addresses positioning first one as primary.
-        //        IPAddressInfo[] secondaryIpAddresses = this.GetSecondaryIpAddresses(interfaceName);
+		//    this.Terminal.EnterConfigMode();
 
-        //        this.Terminal.EnterConfigMode();
-        //        response = this.Terminal.SendSync("interface " + interfaceName);
-                
-        //        if (secondaryIpAddresses.Length > 0)
-        //        {
-        //            // Temporary remove secondary ip addresses
-        //            foreach (IPAddressInfo ipAddressInfo in secondaryIpAddresses)
-        //            {
-        //                response = this.Terminal.SendSync("no ip address " + ipAddressInfo.IPAddress + " " + ipAddressInfo.IPSubnetMask + " secondary");
-        //            }
-        //        }
+		//    string response = this.Terminal.SendSync("interface " + interfaceName);
+		//    response = this.Terminal.SendSync(lineCmd);
+		//    response = this.Terminal.SendSync("exit");
+		//}
 
-        //        response = this.Terminal.SendSync("no ip address " + ipAddress + " " + ipSubnetMask);
+		///// <summary>
+		///// Remove primary or secondary ip address/mask. If secondary ip address exist and primary address needs to be removed, 
+		///// firs we must remove all secondary ip addresses, than to remove primary and finally restore secondary ip addresses
+		///// positioning first one as primary.
+		///// </summary>
+		///// <param name="interfaceName">The name of the interface.</param>
+		///// <param name="ipAddress">IP address.</param>
+		///// <param name="ipSubnetMask">IP subnet mask.</param>
+		//[ProviderAction("IPAddresses.Remove")]
+		//public void RemoveIPAddress(string interfaceName, string ipAddress, string ipSubnetMask)
+		//{
+		//    string response;
 
-        //        // Restore secondary ip addresses positioning first one as primary.
-        //        if (secondaryIpAddresses.Length > 0)
-        //        {
-        //            response = this.Terminal.SendSync("ip address " + secondaryIpAddresses[0].IPAddress + " " + secondaryIpAddresses[0].IPSubnetMask);
+		//    if (this.IsPrimaryIpAddress(interfaceName, ipAddress, ipSubnetMask))
+		//    {
+		//        // If secondary ip address exist and primary address needs to be removed, firs we must remove all secondary ip addresses,
+		//        // than to remove primary and finally restore secondary ip addresses positioning first one as primary.
+		//        IPAddressInfo[] secondaryIpAddresses = this.GetSecondaryIpAddresses(interfaceName);
 
-        //            for (int i = 1; i < secondaryIpAddresses.Length; i++)
-        //            {
-        //                response = this.Terminal.SendSync("ip address " + secondaryIpAddresses[i].IPAddress + " " + secondaryIpAddresses[i].IPSubnetMask + " secondary");
-        //            }
-        //        }
+		//        this.Terminal.EnterConfigMode();
+		//        response = this.Terminal.SendSync("interface " + interfaceName);
 
-        //        // Exit interface
-        //        response = this.Terminal.SendSync("exit");
-        //    }
-        //    else
-        //    {
-        //        this.Terminal.EnterConfigMode();
-        //        response = this.Terminal.SendSync("interface " + interfaceName);
-        //        response = this.Terminal.SendSync("no ip address " + ipAddress + " " + ipSubnetMask + " secondary");
-        //        // Exit interface
-        //        response = this.Terminal.SendSync("exit");
-        //    }
-        //}
+		//        if (secondaryIpAddresses.Length > 0)
+		//        {
+		//            // Temporary remove secondary ip addresses
+		//            foreach (IPAddressInfo ipAddressInfo in secondaryIpAddresses)
+		//            {
+		//                response = this.Terminal.SendSync("no ip address " + ipAddressInfo.IPAddress + " " + ipAddressInfo.IPSubnetMask + " secondary");
+		//            }
+		//        }
 
-        //[ProviderAction("IPAddresses.Update")]
-        //public void SetIPAddress(string interfaceName, string oldIpAddress, string oldIpSubnetMask,  string newIpAddress, string newIpSubnetMask)
-        //{
-        //    string response; 
-            
-        //    if (this.IsPrimaryIpAddress(interfaceName, oldIpAddress, oldIpSubnetMask))
-        //    {
-        //        this.Terminal.EnterConfigMode();
-                
-        //        response = this.Terminal.SendSync("interface " + interfaceName);
-        //        response = this.Terminal.SendSync("ip address " + newIpAddress + " " + newIpSubnetMask);
-        //        response = this.Terminal.SendSync("exit");
-        //    }
-        //    else if (this.IsSecondaryIpAddress(interfaceName, oldIpAddress, oldIpSubnetMask))
-        //    {
-        //        this.Terminal.EnterConfigMode();
+		//        response = this.Terminal.SendSync("no ip address " + ipAddress + " " + ipSubnetMask);
 
-        //        response = this.Terminal.SendSync("interface " + interfaceName);
-        //        response = this.Terminal.SendSync("no ip address " + oldIpAddress + " " + oldIpSubnetMask + " secondary");
-        //        response = this.Terminal.SendSync("ip address " + newIpAddress + " " + newIpSubnetMask + " secondary");
-        //        response = this.Terminal.SendSync("exit");
-        //    }
-        //}
+		//        // Restore secondary ip addresses positioning first one as primary.
+		//        if (secondaryIpAddresses.Length > 0)
+		//        {
+		//            response = this.Terminal.SendSync("ip address " + secondaryIpAddresses[0].IPAddress + " " + secondaryIpAddresses[0].IPSubnetMask);
 
-        //[ProviderAction("IPAddresses.GenerateIPAddressDictionary")]
-        //public void GenerateIPAddressDictionary()
-        //{
-        //    // This require only SNMP implementation while telnet get instant data from device and no need for cacheing.
-        //}
+		//            for (int i = 1; i < secondaryIpAddresses.Length; i++)
+		//            {
+		//                response = this.Terminal.SendSync("ip address " + secondaryIpAddresses[i].IPAddress + " " + secondaryIpAddresses[i].IPSubnetMask + " secondary");
+		//            }
+		//        }
 
-        //public bool IsPrimaryIpAddress(string interfaceName, string ipAddress, string ipSubnetMask)
-        //{
-        //    bool result = false;
+		//        // Exit interface
+		//        response = this.Terminal.SendSync("exit");
+		//    }
+		//    else
+		//    {
+		//        this.Terminal.EnterConfigMode();
+		//        response = this.Terminal.SendSync("interface " + interfaceName);
+		//        response = this.Terminal.SendSync("no ip address " + ipAddress + " " + ipSubnetMask + " secondary");
+		//        // Exit interface
+		//        response = this.Terminal.SendSync("exit");
+		//    }
+		//}
 
-        //    IPAddressInfo primaryIpAddress = this.GetPrimaryIpAddress(interfaceName);
-        //    if (primaryIpAddress != null)
-        //    {
-        //        if (primaryIpAddress.IPAddress.Trim() == ipAddress.Trim() && primaryIpAddress.IPSubnetMask.Trim() == ipSubnetMask.Trim())
-        //        {
-        //            result = true;
-        //        }
-        //    }
+		//[ProviderAction("IPAddresses.Update")]
+		//public void SetIPAddress(string interfaceName, string oldIpAddress, string oldIpSubnetMask,  string newIpAddress, string newIpSubnetMask)
+		//{
+		//    string response; 
 
-        //    return result;
-        //}
+		//    if (this.IsPrimaryIpAddress(interfaceName, oldIpAddress, oldIpSubnetMask))
+		//    {
+		//        this.Terminal.EnterConfigMode();
 
-        //public bool IsSecondaryIpAddress(string interfaceName, string ipAddress, string ipSubnetMask)
-        //{
-        //    bool result = false;
-        //    IPAddressInfo[] secondaryIpAddresses = this.GetSecondaryIpAddresses(interfaceName);
+		//        response = this.Terminal.SendSync("interface " + interfaceName);
+		//        response = this.Terminal.SendSync("ip address " + newIpAddress + " " + newIpSubnetMask);
+		//        response = this.Terminal.SendSync("exit");
+		//    }
+		//    else if (this.IsSecondaryIpAddress(interfaceName, oldIpAddress, oldIpSubnetMask))
+		//    {
+		//        this.Terminal.EnterConfigMode();
 
-        //    foreach (IPAddressInfo secondaryIpAddress in secondaryIpAddresses)
-        //    {
-        //        if (secondaryIpAddress.IPAddress.Trim() == ipAddress.Trim() && secondaryIpAddress.IPSubnetMask.Trim() == ipSubnetMask.Trim())
-        //        {
-        //            result = true;
-        //            break;
-        //        }
-        //    }
+		//        response = this.Terminal.SendSync("interface " + interfaceName);
+		//        response = this.Terminal.SendSync("no ip address " + oldIpAddress + " " + oldIpSubnetMask + " secondary");
+		//        response = this.Terminal.SendSync("ip address " + newIpAddress + " " + newIpSubnetMask + " secondary");
+		//        response = this.Terminal.SendSync("exit");
+		//    }
+		//}
 
-        //    return result;
-        //}
+		//[ProviderAction("IPAddresses.GenerateIPAddressDictionary")]
+		//public void GenerateIPAddressDictionary()
+		//{
+		//    // This require only SNMP implementation while telnet get instant data from device and no need for cacheing.
+		//}
+
+		//public bool IsPrimaryIpAddress(string interfaceName, string ipAddress, string ipSubnetMask)
+		//{
+		//    bool result = false;
+
+		//    IPAddressInfo primaryIpAddress = this.GetPrimaryIpAddress(interfaceName);
+		//    if (primaryIpAddress != null)
+		//    {
+		//        if (primaryIpAddress.IPAddress.Trim() == ipAddress.Trim() && primaryIpAddress.IPSubnetMask.Trim() == ipSubnetMask.Trim())
+		//        {
+		//            result = true;
+		//        }
+		//    }
+
+		//    return result;
+		//}
+
+		//public bool IsSecondaryIpAddress(string interfaceName, string ipAddress, string ipSubnetMask)
+		//{
+		//    bool result = false;
+		//    IPAddressInfo[] secondaryIpAddresses = this.GetSecondaryIpAddresses(interfaceName);
+
+		//    foreach (IPAddressInfo secondaryIpAddress in secondaryIpAddresses)
+		//    {
+		//        if (secondaryIpAddress.IPAddress.Trim() == ipAddress.Trim() && secondaryIpAddress.IPSubnetMask.Trim() == ipSubnetMask.Trim())
+		//        {
+		//            result = true;
+		//            break;
+		//        }
+		//    }
+
+		//    return result;
+		//}
 
 
-        #endregion |   Interface IP Addresses   |
+		#endregion |   Interface IP Addresses   |     
 
-        #region |   Interface Vlans   |
+		#region |   Interface Services   |
+
+		public override async ValueTask SetDhcpServer(string interfaceName, IpAddress? startIpAddress, IpAddress? endIpAddress, int subnetMaskPrefix, IpAddress? defaultGateway, IEnumerable<IpAddress> dnsServers, string domainName)
+		{
+			string response;
+			string ipDhcpCommand = "ip dhcp pool";
+
+			await this.Provider.Terminal.EnterConfigModeAsync();
+
+			if (startIpAddress != null)
+			{
+				response = await this.Provider.Terminal.SendAsync("dhcp service"); // enable DHCp service
+				response = await this.Provider.Terminal.SendAsync($"{ipDhcpCommand} {interfaceName}");
+				response = await this.Provider.Terminal.SendAsync($"network {startIpAddress} {IpHelper.GetSubnetMask(subnetMaskPrefix)}");
+				response = await this.Provider.Terminal.SendAsync($"default-router {defaultGateway}");
+
+				string? dnsServersText = dnsServers.Count() == 0 ? defaultGateway?.ToString() : 
+																   dnsServers.ToString(separator: " ");
+
+				if (!dnsServersText.IsNullOrEmpty())
+					response = await this.Provider.Terminal.SendAsync($"dns-server {dnsServersText}");
+
+				if (domainName.Trim().Length > 0)
+					response = await this.Provider.Terminal.SendAsync($"domain-name {domainName}");
+
+				response = await this.Provider.Terminal.SendAsync("exit");
+			}
+			else // no dhcp-server
+			{
+				response = await this.Provider.Terminal.SendAsync($"no {ipDhcpCommand} {interfaceName}");
+			}
+		}
+
+		#endregion |   Interface Services   |
+
+		#region |   Interface Vlans   |
 
 		public override async ValueTask<SwitchportInfo> GetSwitchportInfo(string interfaceName)
 		{
@@ -520,8 +575,8 @@ namespace NET.Tools.Providers
 
 			response = await this.Provider.Terminal.SendAsync("interface " + interfaceName);
 
-			if (response.ToLower().Contains("invalid input"))
-				throw new ProviderInfoException("Interface is not configurable or does not exists.");
+			if (response.ToLower().Contains("invalid"))
+				throw new ProviderInfoException(String.Format("Interface {0} is not configurable or does not exists.", interfaceName));
 
 			switch (switchportMode)
 			{
