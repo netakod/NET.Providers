@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EFA7FF6D-3E0B-45E3-A93B-D68C18476F35}"
 	ProjectSection(SolutionItems) = preProject
 		NET.Providers\Solution Items\GlobalAssemblyInfo.cs = NET.Providers\Solution Items\GlobalAssemblyInfo.cs
+		NET.Providers\Solution Items\NetProvidersVersionInfo.txt = NET.Providers\Solution Items\NetProvidersVersionInfo.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharpSnmpLib", "SharpSnmpLib", "{D9119F75-7A3E-4664-B82E-B5EE1AE09458}"
@@ -38,21 +39,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Providers.Terminal", "N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.Providers.Web", "NET.Providers\NET.Providers.Web\NET.Providers.Web.csproj", "{7E6870AA-4450-4003-BDA8-38A717FFAF1A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple", "SimpleObjectsLib\Simple.Core\Simple\Simple.csproj", "{E12A2184-0070-4159-9049-C9080F3F3D84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple", "Simple.Core\Simple\Simple.csproj", "{E12A2184-0070-4159-9049-C9080F3F3D84}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Network", "SimpleObjectsLib\Simple.Core\Simple.Network\Simple.Network.csproj", "{C297AD2C-7D20-4557-8D91-7476055DD24A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Network", "Simple.Core\Simple.Network\Simple.Network.csproj", "{C297AD2C-7D20-4557-8D91-7476055DD24A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Collections", "SimpleObjectsLib\Simple.Core\Simple.Collections\Simple.Collections.csproj", "{8572D84A-871C-4B3A-AA90-E5C03D9F2085}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Collections", "Simple.Core\Simple.Collections\Simple.Collections.csproj", "{8572D84A-871C-4B3A-AA90-E5C03D9F2085}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Serialization", "SimpleObjectsLib\Simple.Core\Simple.Serialization\Simple.Serialization.csproj", "{712A167A-EDCF-4E91-8B89-4FCE9F7DA2C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Serialization", "Simple.Core\Simple.Serialization\Simple.Serialization.csproj", "{712A167A-EDCF-4E91-8B89-4FCE9F7DA2C9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Modeling", "SimpleObjectsLib\Simple.Core\Simple.Modeling\Simple.Modeling.csproj", "{5E33D5F3-C7D1-4BFD-9472-4CA7313904A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Modeling", "Simple.Core\Simple.Modeling\Simple.Modeling.csproj", "{5E33D5F3-C7D1-4BFD-9472-4CA7313904A7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Threading", "SimpleObjectsLib\Simple.Core\Simple.Threading\Simple.Threading.csproj", "{CECBA678-64E9-4E04-8886-73CA2440A618}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Threading", "Simple.Core\Simple.Threading\Simple.Threading.csproj", "{CECBA678-64E9-4E04-8886-73CA2440A618}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Security", "SimpleObjectsLib\Simple.Core\Simple.Security\Simple.Security.csproj", "{DF640EA5-4404-4442-90B1-E9CD3385C5FD}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SimpleObjectsLib", "SimpleObjectsLib", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Security", "Simple.Core\Simple.Security\Simple.Security.csproj", "{DF640EA5-4404-4442-90B1-E9CD3385C5FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -168,7 +167,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{2E42E8C2-0438-4646-86FD-4457691FF15F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{A701ED7F-A392-437A-9B6D-79700B8EA806} = {1BC9397E-5A75-47AA-8225-3DADFD2DCCE6}
 		{5BE5F7BE-62C1-44E5-A38F-649F44DE09DC} = {8CE7AE7B-413A-49ED-A416-28F0D9777F50}
 		{FF9EBB02-7236-43FF-B4E8-6D494E501000} = {2EE724FB-0857-481C-B04F-E18AB150EB9B}

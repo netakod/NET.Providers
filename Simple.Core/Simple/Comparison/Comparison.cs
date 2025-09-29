@@ -48,7 +48,7 @@ namespace Simple
 
         public static bool IsEmpty(object? value)
         {
-            bool result = false;
+            bool result;
 
             if (value == null)
             {
@@ -58,10 +58,14 @@ namespace Simple
             {
                 result = true;
             }
-            else
-            {
-                result = false;
-            }
+            else if (value!.GetType().IsValueType && Convert.ToInt64(value) == 0)
+			{
+				result = true;
+			}
+			else
+			{
+				result = false;
+			}
 
             return result;
         }
@@ -105,6 +109,12 @@ namespace Simple
             type1 = value1.GetType();
             type2 = value2.GetType();
 
+			if (type1 == typeof(int) && type2 == typeof(long))
+				return (long)(int)value1 == (long)value2;
+
+			if (type2 == typeof(int) && type1 == typeof(long))
+				return (long)(int)value2 == (long)value2;
+
 			if (type1 != type2)
 			{
 				if (type1.IsEnum)
@@ -117,10 +127,10 @@ namespace Simple
 						(type2 == typeof(string) && type1 == typeof(DBNull) && ((string)value2).Trim().Length == 0));
 			}
 
-            if (type1 == typeof(int))
+			if (type1 == typeof(int))
 				return (int)value1 == (int)value2;
 
-            if (type1 == typeof(string))
+			if (type1 == typeof(string))
             {
                 if (trimBeforeStringComparison)
                     return ((string)value1).Trim().Equals(((string)value2).Trim());

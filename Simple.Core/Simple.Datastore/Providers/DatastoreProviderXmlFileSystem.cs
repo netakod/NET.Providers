@@ -48,7 +48,7 @@ namespace Simple.Datastore
 			return result.ToArray();
 		}
 
-		public List<TKey> GetRecordKeys<TKey>(TableInfo tableInfo, int idPropertyIndex, string idFieldName)
+		public List<TKey> GetRecordKeys<TKey>(TableInfo tableInfo, IPropertyModel idPropertyModel)
 		{
 			DirectoryInfo tableDirectory = this.GetTableDirectory(tableInfo.TableName);
 			FileInfo[] recordFiles = tableDirectory.GetFiles(String.Format("*{0}", xmlDatastoreRecordFileExtension));
@@ -91,7 +91,7 @@ namespace Simple.Datastore
 		//	}
 		//}
 
-		public IDataReader GetRecord(TableInfo tableInfo, int idPropertyIndex, string idFieldName, object id, IEnumerable<int>? propertyIndexes = null, Func<int, IPropertyModel>? getPropertyModel = null)
+		public IDataReader GetRecord(TableInfo tableInfo, IPropertyModel idPropertyModel, object id, IEnumerable<int>? propertyIndexes = null, Func<int, IPropertyModel>? getPropertyModel = null)
 		{
 			IDictionary<string, object?> valuesByFieldName = this.GetRecordInternal(tableInfo.TableName, id);
 			DataTable dataTable = new DataTable();
@@ -202,7 +202,7 @@ namespace Simple.Datastore
 			this.WriteRecord(tableInfo.TableName, id, recordData);
 		}
 
-		public void DeleteRecord(TableInfo tableInfo, int idPropertyIndex, string idFieldName, object id)
+		public void DeleteRecord(TableInfo tableInfo, IPropertyModel idPropertyModel, object id)
 		{
 			DirectoryInfo tableDirectory = this.GetTableDirectory(tableInfo.TableName);
 			File.Delete(String.Format("{0}\\{1}.{2}", tableDirectory.FullName, id.ToString(), xmlDatastoreRecordFileExtension));

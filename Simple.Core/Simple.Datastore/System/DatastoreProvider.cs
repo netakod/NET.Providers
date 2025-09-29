@@ -103,11 +103,11 @@ namespace Simple.Datastore
         //    }
         //}
 
-        public List<TKey> GetRecordKeys<TKey>(TableInfo tableInfo, int idPropertyIndex, string idFieldName)
+        public List<TKey> GetRecordKeys<TKey>(TableInfo tableInfo, IPropertyModel idPropertyModel)
         {
             lock (lockObject)
             {
-                return this.Provider.GetRecordKeys<TKey>(tableInfo, idPropertyIndex, idFieldName);
+                return this.Provider.GetRecordKeys<TKey>(tableInfo, idPropertyModel);
             }
         }
 
@@ -127,11 +127,11 @@ namespace Simple.Datastore
 		//	}
 		//}
 
-		public IDataReader GetRecord(TableInfo tableInfo, int idPropertyIndex, string idPropertyName, object id, IEnumerable<int>? propertyIndexes = null, Func<int, IPropertyModel>? getPropertyModel = null)
+		public IDataReader GetRecord(TableInfo tableInfo, IPropertyModel idPropertyModel, object id, IEnumerable<int>? propertyIndexes = null, Func<int, IPropertyModel>? getPropertyModel = null)
         {
             lock (lockObject)
             {
-                return this.Provider.GetRecord(tableInfo, idPropertyIndex, idPropertyName, id, propertyIndexes, getPropertyModel);
+                return this.Provider.GetRecord(tableInfo, idPropertyModel, id, propertyIndexes, getPropertyModel);
             }
         }
 
@@ -159,11 +159,11 @@ namespace Simple.Datastore
             }
         }
 
-        public void DeleteRecord(TableInfo tableInfo, int idPropertyIndex, string idFieldName, object id)
+        public void DeleteRecord(TableInfo tableInfo, IPropertyModel idPropertyModel, object id)
         {
             lock (lockObject)
             {
-                this.Provider.DeleteRecord(tableInfo, idPropertyIndex, idFieldName, id);
+                this.Provider.DeleteRecord(tableInfo, idPropertyModel, id);
             }
         }
 

@@ -23,7 +23,7 @@ namespace Simple.Modeling
 		PropertyInfo? PropertyInfo { get; }
 		Type FieldType { get; }
 		Type DatastoreType { get; }
-		string? DatastoreFieldName { get; }
+		string DatastoreFieldName { get; }
 		//int DatastoreTypeId { get; }
 		DbType DbType { get; }
 		OleDbType OleDbType { get; }

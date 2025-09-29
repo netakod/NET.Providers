@@ -317,12 +317,23 @@ namespace Simple.Serialization
 
 		#region |   Unsigned Primitive Types: byte, ushort, uint, ulong   |
 
+		/// <summary>
+		/// Returns a <see cref="byte" /> from the sequence.
+		/// </summary>
+		/// <returns>A Byte</returns>
 		public Byte ReadByte()
         {
             this.reader.TryRead(out byte value);
 
             return value;
         }
+
+		/// <summary>
+		/// Returns a <see cref="byte" /> from the sequence.
+		/// </summary>
+		/// <param name="value">A value that has been read, if posible</param>
+		/// <returns>true if value is read, false if not posible to read.</returns>
+		public bool TryReadByte(out byte value) => this.reader.TryRead(out value);
 
 		/// <summary>
 		/// Returns a Nullable <see cref="byte" /> from the sequence.

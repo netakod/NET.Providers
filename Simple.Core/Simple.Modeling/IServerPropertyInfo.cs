@@ -14,6 +14,8 @@ namespace Simple.Modeling
 		int DatastoreTypeId { get; }
 		bool IsRelationTableId { get; }
 		bool IsRelationObjectId { get; }
+		bool IsRelationZeroValueDatastoreDBNull { get; }
+
 		bool IsSerializationOptimizable { get; }
 		bool IsClientToServerSeriazable { get; }
 		bool IsServerToClientSeriazable { get; }

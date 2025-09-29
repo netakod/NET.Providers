@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Core\Simple.Network\Simple.Network.csproj" />
-    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Core\Simple\Simple.csproj" />
+    <ProjectReference Include="..\..\Simple.Core\Simple.Network\Simple.Network.csproj" />
+    <ProjectReference Include="..\..\Simple.Core\Simple\Simple.csproj" />
   </ItemGroup>
 
 </Project>

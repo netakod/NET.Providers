@@ -191,7 +191,7 @@ namespace Simple
             return result;
         }
 
-        public static string ToString(object value)
+        public static string ToString(object? value)
         {
             if (value == null)
                 return "null";

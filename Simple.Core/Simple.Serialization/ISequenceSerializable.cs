@@ -11,7 +11,7 @@ namespace Simple.Serialization
 
     public interface ISequenceWritable
     {
-        int GetBufferCapacity();
+        //int GetBufferCapacity();
         void WriteTo(ref SequenceWriter writer, object? context);
 	}
 

@@ -37,7 +37,8 @@ namespace Simple.Modeling
 	{
 		private TPropertyModel[] propertyModelsByIndexArray;
 		//private PropertySequence propertySequence = null;
-		private SimpleDictionary<string, TPropertyModel> propertyModelsByName;
+		private SimpleDictionary<string, TPropertyModel> propertyModelsByPropertyName;
+		private SimpleDictionary<string, TPropertyModel> propertyModelsByDatastoreFieldName;
 
 
 		public PropertyModelCollection(Type modelHolderClassType, object owner)
@@ -162,22 +163,27 @@ namespace Simple.Modeling
 
 			//propertyModels.Sort(sortingComparison);
 
-			this.propertyModelsByName = new SimpleDictionary<string, TPropertyModel>(propertyModels.Count);
 			this.propertyModelsByIndexArray = new TPropertyModel[maxIndex + 1];
+			this.propertyModelsByPropertyName = new SimpleDictionary<string, TPropertyModel>(propertyModels.Count);
+			this.propertyModelsByDatastoreFieldName = new SimpleDictionary<string, TPropertyModel>(propertyModels.Count);
 
 			foreach(TPropertyModel propertyModel in propertyModels)
 			{
 				this.propertyModelsByIndexArray[propertyModel.PropertyIndex] = propertyModel;
-				this.propertyModelsByName.Add(propertyModel.PropertyName, propertyModel);
+				this.propertyModelsByPropertyName.Add(propertyModel.PropertyName, propertyModel);
+
+				if (propertyModel.IsStorable)
+					this.propertyModelsByDatastoreFieldName.Add(propertyModel.DatastoreFieldName, propertyModel);
 			}
 
 			//this.propertySequence = new PropertySequence(propertyModels.AsCustom<IPropertyModel>().ToArray());
 		}
 
-		internal PropertyModelCollection(TPropertyModel[] propertyModelsByIndexArray, IDictionary<string, TPropertyModel> propertyModelsByName)
+		internal PropertyModelCollection(TPropertyModel[] propertyModelsByIndexArray, IDictionary<string, TPropertyModel> propertyModelsByName, IDictionary<string, TPropertyModel> propertyModelsByDatastoreFieldName)
 		{
 			this.propertyModelsByIndexArray = propertyModelsByIndexArray;
-			this.propertyModelsByName = new SimpleDictionary<string, TPropertyModel>(propertyModelsByName);
+			this.propertyModelsByPropertyName = new SimpleDictionary<string, TPropertyModel>(propertyModelsByName);
+			this.propertyModelsByDatastoreFieldName = new SimpleDictionary<string, TPropertyModel>(propertyModelsByDatastoreFieldName);
 			//this.propertySequence = new PropertySequence(this.propertyModelsByName.AsCustom<string, IPropertyModel>().Values.ToArray());
 		}
 
@@ -202,7 +208,7 @@ namespace Simple.Modeling
 			{
 				TPropertyModel value;
 
-				if (this.propertyModelsByName.TryGetValue(propertyName, out value))
+				if (this.propertyModelsByPropertyName.TryGetValue(propertyName, out value))
 					return value;
 
 				return default;
@@ -216,12 +222,12 @@ namespace Simple.Modeling
 		///// <returns>The number of elements contained in the collection.</returns>
 		public int Count
 		{
-			get { return this.propertyModelsByName.Values.Count; }
+			get { return this.propertyModelsByPropertyName.Values.Count; }
 		}
 
 		public int GetMaxIndex()
 		{
-			return (this.propertyModelsByName.Values.Count > 0) ? this.propertyModelsByName.Values.Max(model => model.PropertyIndex) : -1;
+			return (this.propertyModelsByPropertyName.Values.Count > 0) ? this.propertyModelsByPropertyName.Values.Max(model => model.PropertyIndex) : -1;
 		}
 
 		public TPropertyModel? GetPropertyModel(int propertyIndex)
@@ -234,26 +240,37 @@ namespace Simple.Modeling
 
 		public TPropertyModel? GetPropertyModel(string propertyName) => this[propertyName];
 
+		public TPropertyModel? GetPropertyModelByDatastoreFieldName(string datastoreFieldName)
+		{
+			TPropertyModel value;
+
+			if (this.propertyModelsByDatastoreFieldName.TryGetValue(datastoreFieldName, out value))
+				return value;
+
+			return default;
+		}
+
+
 		//public CustomDictionary<string, T> ToDictionary<T>()
 		//	where T : IPropertyModelBase
 		//{
 		//	return this.propertyModelsByName.AsCustom<T>();
 		//}
 
-		public PropertyModelCollection<T> AsCustom<T>()
-			where T : class, IPropertyModel
-		{
-			T[] customPropertyModelsByIndexArray = new T[this.propertyModelsByIndexArray.Length];
-			IDictionary<string, T> customPropertyModelsByName = this.propertyModelsByName.AsCustom<T>();
+		//public PropertyModelCollection<T> AsCustom<T>()
+		//	where T : class, IPropertyModel
+		//{
+		//	T[] customPropertyModelsByIndexArray = new T[this.propertyModelsByIndexArray.Length];
+		//	IDictionary<string, T> customPropertyModelsByName = this.propertyModelsByPropertyName.AsCustom<T>();
 
-			for (int i = 0; i < customPropertyModelsByIndexArray.Length; i++)
-			{
-				object item = this.propertyModelsByIndexArray[i];
-				customPropertyModelsByIndexArray[i] = (T)item;
-			}
+		//	for (int i = 0; i < customPropertyModelsByIndexArray.Length; i++)
+		//	{
+		//		object item = this.propertyModelsByIndexArray[i];
+		//		customPropertyModelsByIndexArray[i] = (T)item;
+		//	}
 
-			return new PropertyModelCollection<T>(customPropertyModelsByIndexArray, customPropertyModelsByName);
-		}
+		//	return new PropertyModelCollection<T>(customPropertyModelsByIndexArray, customPropertyModelsByName);
+		//}
 
 		//public TPropertyModel[] ToArray()
 		//{
@@ -295,7 +312,7 @@ namespace Simple.Modeling
 
 		IEnumerator<TPropertyModel> IEnumerable<TPropertyModel>.GetEnumerator()
 		{
-			return this.propertyModelsByName.Values.GetEnumerator();
+			return this.propertyModelsByPropertyName.Values.GetEnumerator();
 //			return (this as IPropertyModelCollection<IPropertyModelBase>).GetEnumerator();
 		}
 
@@ -314,7 +331,7 @@ namespace Simple.Modeling
 		/// <returns>An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return this.propertyModelsByName.Values.GetEnumerator();
+			return this.propertyModelsByPropertyName.Values.GetEnumerator();
 		}
 	}
 

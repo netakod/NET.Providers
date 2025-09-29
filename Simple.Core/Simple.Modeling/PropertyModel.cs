@@ -14,6 +14,7 @@ namespace Simple.Modeling
 	// TODO: Remove inheritance from ModelElement
 	public class PropertyModel : IPropertyModel, IServerPropertyInfo, ICloneable // : ModelElement
 	{
+		private string propertyName;
 		private Type propertyType;
 		private Type datastoreType;
 		public static int UnspecifiedIndex = -1;
@@ -156,7 +157,19 @@ namespace Simple.Modeling
 		//public SimpleProperty PropertyRepository { get; private set; }
 		//public int Index { get; set; }
 		public int PropertyIndex { get; set; }
-		public string PropertyName { get; set; }
+		
+		public string PropertyName 
+		{
+			get => this.propertyName;
+			set
+			{
+				this.propertyName = value;
+
+				if (this.DatastoreFieldName.IsNullOrEmpty())
+					this.DatastoreFieldName = value;
+			}
+		}
+
 		public string Caption { get; set; } = String.Empty;
 		public string Caption2 { get; set; } = String.Empty;
 		public string Description { get; set; } = String.Empty;
@@ -188,7 +201,7 @@ namespace Simple.Modeling
 			}
 		}
 
-		public string? DatastoreFieldName { get; set; } = null;
+		public string DatastoreFieldName { get; set; }
 		public int DatastoreTypeId { get; private set; }
 		public DbType DbType { get; set; }
 		public OleDbType OleDbType { get; set; }
@@ -205,6 +218,7 @@ namespace Simple.Modeling
 		public bool IsId { get; set; }
 		public bool IsRelationTableId { get; set; }
 		public bool IsRelationObjectId { get; set; }
+		public bool IsRelationZeroValueDatastoreDBNull { get; set; }
 		public bool IsPreviousId { get; set; }
 		public bool IsOrderIndex { get; set; }
 		//public bool IsActionSetOrderIndex { get; set; }

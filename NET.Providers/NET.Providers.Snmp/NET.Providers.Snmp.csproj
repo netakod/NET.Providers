@@ -10,9 +10,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SharpSnmpLib\SharpSnmpLib\SharpSnmpLib.csproj" />
-    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Core\Simple.Network\Simple.Network.csproj" />
-    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Core\Simple.Threading\Simple.Threading.csproj" />
-    <ProjectReference Include="..\..\SimpleObjectsLib\Simple.Core\Simple\Simple.csproj" />
+    <ProjectReference Include="..\..\Simple.Core\Simple.Network\Simple.Network.csproj" />
+    <ProjectReference Include="..\..\Simple.Core\Simple.Threading\Simple.Threading.csproj" />
+    <ProjectReference Include="..\..\Simple.Core\Simple\Simple.csproj" />
   </ItemGroup>
 
 </Project>

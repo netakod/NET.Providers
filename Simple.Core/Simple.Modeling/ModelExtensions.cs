@@ -39,7 +39,7 @@ namespace Simple.Modeling
 			return values;
 		}
 
-		public static IPropertyModel[] ToModelSequence(this int[] propertyIndexSequence, IPropertyModelCollection<IPropertyModel> propertyModelCollection)
+		public static IPropertyModel[] ToModelSequence(this int[] propertyIndexSequence, IPropertyModelCollection<PropertyModel> propertyModelCollection)
 		{
 			IPropertyModel[] values = new IPropertyModel[propertyIndexSequence.Length];
 
