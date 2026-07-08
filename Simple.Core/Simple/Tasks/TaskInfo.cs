@@ -1,35 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Simple
 {
-	public readonly struct TaskInfo<T> : ITaskInfo<T>, ITaskInfo
+	public readonly struct TaskInfo<T> : ITaskInfo<T?>, ITaskInfo 
 	{
-		private readonly T resultValue;
+		private readonly T? resultValue;
 		private readonly TaskResultInfo resultInfo;
 		private readonly string message;
 
-		public TaskInfo(T resultValue)
+		public TaskInfo(T? resultValue)
 			: this(resultValue, info: TaskResultInfo.Succeeded)
 		{
 		}
 
-		public TaskInfo(T resultValue, TaskResultInfo info)
+		public TaskInfo(T? resultValue, TaskResultInfo info)
 			: this(resultValue, info, message: String.Empty)
 		{
 		}
 
-		public TaskInfo(T resultValue, TaskResultInfo info, string message)
+		public TaskInfo(T? resultValue, TaskResultInfo info, string message)
 		{
 			this.resultValue = resultValue;
 			this.resultInfo = info;
 			this.message = message;
 		}
 
-		public T ResultValue => this.resultValue;
+		public T? ResultValue => this.resultValue;
 		public TaskResultInfo ResultInfo => this.resultInfo;
 		public string Message => this.message;
 		public bool Succeeded => this.ResultInfo == TaskResultInfo.Succeeded;
@@ -46,7 +47,7 @@ namespace Simple
 		public static readonly TaskInfo CompletedSuccessful = new TaskInfo(TaskResultInfo.Succeeded);
 
 		public TaskInfo(TaskResultInfo info)
-			: this(info, message: default)
+			: this(info, message: String.Empty)
 		{
 		}
 

@@ -9,12 +9,12 @@ namespace Simple
     // emulates StrCmpLogicalW, but not fully
     public class StringLogicalComparer : IComparer<string>, IComparer
     {
-        public int Compare(object? a, object? b)
+        public static int Compare(object? a, object? b)
         {
             return CompareObject(a, b);
         }
 
-        public int Compare(string? a, string? b)
+        public static int Compare(string? a, string? b)
         {
             return CompareString(a, b);
         }
@@ -185,5 +185,36 @@ namespace Simple
                     break;
             }
         }
-    }//EOC
+
+		/// <summary>
+		/// Compares two objects and returns a value indicating whether one is less than,
+		///     equal to, or greater than the other.
+		///
+		/// Exceptions:
+		///   T:System.ArgumentException:
+		///     Neither x nor y implements the System.IComparable interface. -or- x and y are
+		///     of different types and neither one can handle comparisons with the other.
+		/// </summary>
+		/// <param name="x">The first object to compare.</param>
+		/// <param name="y">The second object to compare.</param>
+		/// <returns>A signed integer that indicates the relative values of x and y:
+		///     - If less than 0, x is less than y.
+		///     - If 0, x equals y.
+		///     - If greater than 0, x is greater than y.</returns>
+		int IComparer.Compare(object? x, object? y) => Compare(x, y);
+
+		/// <summary>
+		/// Compares two objects and returns a value indicating whether one is less than,
+		///     equal to, or greater than the other.
+		/// Value – Meaning
+		///     Less than zero –x is less than y.
+		///     Zero –x equals y.
+		///     Greater than zero –x is greater than y.
+		/// </summary>
+		/// <param name="x">The first object to compare.</param>
+		/// <param name="y">The second object to compare.</param>
+		/// <returns>A signed integer that indicates the relative values of x and y, as shown in the
+		///     following table.</returns>
+		int IComparer<string>.Compare(string? x, string? y) => Compare(x, y);
+	}
 }

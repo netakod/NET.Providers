@@ -7,20 +7,20 @@ namespace Simple
 {
     public static class Conversion 
     {
-        public static T TryChangeType<T>(object? value)
+        public static T? TryChangeType<T>(object? value)
         {
             return TryChangeType<T>(value, () => default);
         }
 
-        public static T TryChangeType<T>(object? value, T defaultValue)
+        public static T? TryChangeType<T>(object? value, T defaultValue)
         {
             return TryChangeType<T>(value, () => defaultValue);
         }
 
-        public static T TryChangeType<T>(object? value, Func<T> getDefaultValue)
+        public static T? TryChangeType<T>(object? value, Func<T> getDefaultValue)
         {
             //object resultObject = TryChangeType(value, typeof(T));
-            T result;
+            T? result;
             object? resultObject = null;
 
             if (value == null || Convert.IsDBNull(value))
@@ -37,7 +37,7 @@ namespace Simple
 
                 try
                 {
-                    result = (T)resultObject;
+                    result = (T?)resultObject;
                 }
                 catch
                 {

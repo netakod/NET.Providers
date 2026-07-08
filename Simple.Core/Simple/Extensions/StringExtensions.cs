@@ -312,5 +312,20 @@ namespace Simple
 				s += lineText;
 			}
 		}
+
+		public static string Replace(this string text, Dictionary<char, char> charsToReplace)
+		{
+			char[] textChars = text.ToCharArray();
+
+			for (int i = 0; i < textChars.Length; i++)
+			{
+				char element = textChars[i];
+
+				if (charsToReplace.TryGetValue(element, out char replacementValue))
+					textChars[i] = replacementValue;
+			}
+
+			return new string(textChars);
+		}
 	}
 }

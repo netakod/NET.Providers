@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HtmlAgilityPack\HtmlAgilityPack.csproj" />
+    <ProjectReference Include="..\Routrek.Granados-SSH1\Routrek.Granados.csproj" />
+    <ProjectReference Include="..\SharpSnmpLib\SharpSnmpLib\SharpSnmpLib.csproj" />
+    <ProjectReference Include="..\Simple.Core\Simple.Core.csproj" />
+    <ProjectReference Include="..\SSH.NET\src\Renci.SshNet\Renci.SshNet.csproj" />
+    <ProjectReference Include="..\SshNet.Security.Cryptography\src\SshNet.Security.Cryptography.NETStandard\SshNet.Security.Cryptography.NETStandard.csproj" />
+  </ItemGroup>
+
+</Project>

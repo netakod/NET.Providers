@@ -209,25 +209,35 @@ namespace Simple
 		//      }
 
 
-		public static bool IsNullable(Type type)
+
+		//static bool IsNullable<T>(T obj)
+		//{
+		//	if (obj == null) 
+		//		return true; // obvious
+			
+		//	Type type = typeof(T);
+			
+		//	if (!type.IsValueType) 
+		//		return true; // ref-type
+			
+		//	if (Nullable.GetUnderlyingType(type) != null) 
+		//		return true; // Nullable<T>
+			
+		//	return false; // value-type
+		//}
+
+		public static bool IsNullable<T>(T obj)
 		{
-			if (type.IsGenericType)
-			{
-				return type.GetGenericTypeDefinition() == typeof(Nullable<>);
-			}
-			else
-			{
-				return Nullable.GetUnderlyingType(type) != null;
-			}
+			if (obj == null)
+				return true; // obvious
+
+			return IsNullable<T>();
 		}
 
-		static bool IsNullable<T>(T obj)
+		public static bool IsNullable<T>() => IsNullable(typeof(T));
+
+		public static bool IsNullable(Type type)
 		{
-			if (obj == null) 
-				return true; // obvious
-			
-			Type type = typeof(T);
-			
 			if (!type.IsValueType) 
 				return true; // ref-type
 			
@@ -236,6 +246,15 @@ namespace Simple
 			
 			return false; // value-type
 		}
+
+		//public static bool IsNullable2(Type type) // <- this is not good
+		//{
+		//	if (type.IsGenericType)
+		//		return type.GetGenericTypeDefinition() == typeof(Nullable<>);
+		//	else
+		//		return Nullable.GetUnderlyingType(type) != null;
+		//}
+
 
 		public static SimpleTypeInfo GetSimpleTypeInfo<T>()
         {
@@ -779,6 +798,11 @@ namespace Simple
 			Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
 			return FindTopInheritedTypeInAssembly(assemblies, typeof(T));
+		}
+
+		public static Type FindTopInheritedTypeInAssembly<T>(Assembly assembly)
+		{
+			return FindTopInheritedTypeInAssembly(new Assembly[] { assembly }, typeof(T));
 		}
 
 		public static Type FindTopInheritedTypeInAssembly<T>(IEnumerable<Assembly> assemblies)

@@ -18,6 +18,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Lextm.SharpSnmpLib.Security
@@ -65,7 +66,7 @@ namespace Lextm.SharpSnmpLib.Security
         /// <returns></returns>
         public byte[] GetSaltBytes()
         {
-            return BitConverter.GetBytes(NextSalt).Reverse().ToArray();
+            return (BitConverter.GetBytes(NextSalt) as IEnumerable<byte>).Reverse().ToArray();
         }
 
         /// <summary>

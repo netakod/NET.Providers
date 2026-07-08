@@ -56,7 +56,7 @@ namespace Simple
 		public TaskInfo<TResult> SendRequest<TResult>(Func<TResult> func)
 		{
 			TaskInfo<TResult> result;
-			TResult resultValue = default(TResult);
+			TResult? resultValue = default(TResult);
 
 			try
 			{
@@ -78,7 +78,7 @@ namespace Simple
 		public async ValueTask<TaskInfo<TResult>> SendRequestAsync<TResult>(AsyncFunc<TResult> func)
 		{
 			TaskInfo<TResult> result;
-			TResult resultValue = default(TResult);
+			TResult? resultValue = default(TResult);
 
 			try
 			{
