@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Simple.Network;
 
-namespace NET.Tools.Telnet
+namespace NET.Providers.Telnet
 {
 	public class TelnetClient : TelnetPipeClient 
 	{

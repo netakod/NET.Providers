@@ -8,7 +8,7 @@
 //using Simple;
 //using Thought.Net.Telnet;
 
-//namespace NET.Tools.Terminal
+//namespace NET.Providers.Terminal
 //{
 //	public class TelnetControlThoughtNetTelnet : ITelnetControl, IDisposable
 //    {

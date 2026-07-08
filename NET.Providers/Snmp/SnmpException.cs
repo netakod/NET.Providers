@@ -15,7 +15,7 @@
 // 
 using System;
 
-namespace NET.Tools.Snmp
+namespace NET.Providers.Snmp
 {
 	/// <summary>
 	/// SNMP generic exception. Thrown every time SNMP specific error is encountered.

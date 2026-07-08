@@ -11,9 +11,9 @@ using Renci.SshNet;
 using Renci.SshNet.Common;
 using Simple;
 using Simple.Network;
-using NET.Tools.Telnet;
+using NET.Providers.Telnet;
 
-namespace NET.Tools.Terminal
+namespace NET.Providers.Terminal
 {
     public class Ssh2ClientSshNetNew : TelnetClientBase, ISshClient, ITelnetClient, IDisposable
     {

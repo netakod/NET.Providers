@@ -15,7 +15,7 @@ using System.Reflection;
 using System.Threading;
 using Simple.Network;
 
-namespace NET.Tools.Snmp
+namespace NET.Providers.Snmp
 {
 	public class SnmpClientSharpSnmpLib : ISnmpClient, IDisposable
 	{

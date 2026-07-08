@@ -6,7 +6,7 @@
 //using System.Net.NetworkInformation;
 //using System.Net.Sockets;
 
-//namespace NET.Tools.Telnet
+//namespace NET.Providers.Telnet
 //{
 //	public static class DnsHelper
 //	{

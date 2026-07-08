@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Simple.Network;
-using NET.Tools.Terminal;
+using NET.Providers.Terminal;
 
 namespace NET.Providers
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NET.Tools.Telnet_DevelopOld
+namespace NET.Providers.Telnet_DevelopOld
 {
 	internal abstract class ClientBase
 	{

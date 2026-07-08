@@ -5,9 +5,9 @@ using System.Text;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using NET.Tools.Telnet;
+using NET.Providers.Telnet;
 
-namespace NET.Tools.Terminal
+namespace NET.Providers.Terminal
 {
     public interface ISshClient : ITelnetClient
     {

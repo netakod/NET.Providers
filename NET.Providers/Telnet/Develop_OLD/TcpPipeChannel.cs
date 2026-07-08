@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Buffers;
 using System.Collections.Generic;
 
-namespace NET.Tools.Telnet_DevelopOld
+namespace NET.Providers.Telnet_DevelopOld
 {
 	public abstract class TcpPipeChannel : PipeChannel
     {

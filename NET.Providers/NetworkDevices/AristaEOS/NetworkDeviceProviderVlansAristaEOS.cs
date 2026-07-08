@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NET.Tools.Telnet_DevelopOld;
+using NET.Providers.Telnet_DevelopOld;
 using Simple;
 
 namespace NET.Providers

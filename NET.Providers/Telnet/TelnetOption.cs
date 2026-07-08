@@ -1,6 +1,6 @@
 using System;
 
-namespace NET.Tools.Telnet
+namespace NET.Providers.Telnet
 {
 
 	/// <summary>

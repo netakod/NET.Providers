@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NET.Tools.Telnet
+namespace NET.Providers.Telnet
 {
 
 	/// <summary>

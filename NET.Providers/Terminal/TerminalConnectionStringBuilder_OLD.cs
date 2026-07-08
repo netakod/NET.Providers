@@ -5,7 +5,7 @@
 //using Simple;
 //using Simple.Serialization;
 
-//namespace NET.Tools.Terminal
+//namespace NET.Providers.Terminal
 //{
 //    public class TerminalConnectionStringBuilder : ConnectionStringBuilder
 //    {

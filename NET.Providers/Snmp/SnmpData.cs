@@ -5,7 +5,7 @@ using System.Text;
 using System.Diagnostics.CodeAnalysis;
 using Simple;
 
-namespace NET.Tools.Snmp
+namespace NET.Providers.Snmp
 {
     public struct SnmpData
     {

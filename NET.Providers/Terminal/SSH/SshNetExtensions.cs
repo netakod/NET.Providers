@@ -8,7 +8,7 @@ using Renci.SshNet;
 using Renci.SshNet.Common;
 using Renci.SshNet.Sftp;
 
-namespace NET.Tools.Terminal
+namespace NET.Providers.Terminal
 {
     public static class SshNetExtensions
     {

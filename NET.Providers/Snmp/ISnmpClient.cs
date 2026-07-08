@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Simple;
 using Lextm.SharpSnmpLib.Messaging;
 
-namespace NET.Tools.Snmp
+namespace NET.Providers.Snmp
 {
 	public interface ISnmpClient
 	{

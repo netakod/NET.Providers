@@ -4,7 +4,7 @@
 //using System.Text;
 //using Simple.Modeling;
 
-//namespace NET.Tools.Terminal
+//namespace NET.Providers.Terminal
 //{
 //    public class TerminalConnectionStringModel : ConnectionStringModel<TerminalConnectionStringModel>
 //    {

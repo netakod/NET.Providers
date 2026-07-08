@@ -3,9 +3,9 @@
 //using System.Text;
 //using System.Net.Sockets;
 //using System.Threading;
-//using NET.Tools.Telnet;
+//using NET.Providers.Telnet;
 
-//namespace NET.Tools.Terminal
+//namespace NET.Providers.Terminal
 //{
 //	public class SimpleTelnet : ITelnetControl, IDisposable
 //	{

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics.CodeAnalysis;
 
-namespace NET.Tools.Snmp
+namespace NET.Providers.Snmp
 {
 	/// <summary>
 	///  The ASN.1 object value type codes. The values are specified in RFC1213 as a subset of ASN.1

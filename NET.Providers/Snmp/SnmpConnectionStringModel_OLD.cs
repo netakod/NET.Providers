@@ -5,7 +5,7 @@
 //using Simple.Modeling;
 //using System.Drawing;
 
-//namespace NET.Tools.Snmp
+//namespace NET.Providers.Snmp
 //{
 //    public class SnmpControlConnectionStringModel : ConnectionStringModel<SnmpControlConnectionStringModel>
 //    {

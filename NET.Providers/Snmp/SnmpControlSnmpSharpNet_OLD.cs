@@ -10,7 +10,7 @@
 //using SnmpSharpNet;
 //using Lextm.SharpSnmpLib.Messaging;
 
-//namespace NET.Tools.Snmp
+//namespace NET.Providers.Snmp
 //{
 //    // TODO: Create Async methods from new thread while CreateUdpTarget can take some time to resolve remote hostname if not specified an ip address.
     

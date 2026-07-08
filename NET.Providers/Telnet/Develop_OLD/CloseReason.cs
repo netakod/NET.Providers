@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace NET.Tools.Telnet_DevelopOld
+namespace NET.Providers.Telnet_DevelopOld
 {
     public enum CloseReason
     {

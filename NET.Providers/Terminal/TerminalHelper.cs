@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NET.Tools.Terminal
+namespace NET.Providers.Terminal
 {
     public class TerminalHelper
     {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Simple;
 using Simple.Network;
 
-namespace NET.Tools.Telnet
+namespace NET.Providers.Telnet
 {
 	public class TelnetPipeClient : TelnetClientBase
 	{

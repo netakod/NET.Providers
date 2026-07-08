@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Simple;
 
-namespace NET.Tools.Snmp
+namespace NET.Providers.Snmp
 {
 	public static class SnmpDataExtensions
     {

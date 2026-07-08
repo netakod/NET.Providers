@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
 
-namespace NET.Tools.Telnet_DevelopOld
+namespace NET.Providers.Telnet_DevelopOld
 {
     public abstract partial class PipeChannel : Channel
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Simple;
 using Simple.Network;
-using NET.Tools.Snmp;
+using NET.Providers.Snmp;
 
 namespace NET.Providers
 {

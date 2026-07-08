@@ -5,7 +5,7 @@
 //using Dart.Snmp;
 //using Dart.Common;
 
-//namespace NET.Tools.Snmp
+//namespace NET.Providers.Snmp
 //{
 //    /// <summary>
 //    /// Dart PowerSNMP version of the ISnmpManagerControl implementation.

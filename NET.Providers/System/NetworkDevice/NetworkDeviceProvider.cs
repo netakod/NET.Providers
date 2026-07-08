@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Simple;
 using Simple.Network;
-using NET.Tools.Snmp;
-using NET.Tools.Terminal;
-using NET.Tools.Web;
+using NET.Providers.Snmp;
+using NET.Providers.Terminal;
+using NET.Providers.Web;
 
 namespace NET.Providers
 {

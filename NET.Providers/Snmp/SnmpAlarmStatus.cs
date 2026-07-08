@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NET.Tools.Snmp
+namespace NET.Providers.Snmp
 {
     
     /// <summary>

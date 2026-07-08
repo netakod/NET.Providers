@@ -6,7 +6,7 @@
 //using nsoftware.IPWorksSSNMP;
 //using NET.Providers;
 
-//namespace NET.Tools.Snmp
+//namespace NET.Providers.Snmp
 //{
 //    /// <summary>
 //    /// IPWorks SSNMP v6 version of the ISnmpManagerControl implementation.

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Simple;
-using NET.Tools.Snmp;
+using NET.Providers.Snmp;
 using Simple.Serialization;
 
 namespace NET.Providers

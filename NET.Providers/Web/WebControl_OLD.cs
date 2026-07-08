@@ -9,7 +9,7 @@
 //using System.Collections;
 //using Simple.Network;
 
-//namespace NET.Tools.Web
+//namespace NET.Providers.Web
 //{
 //	public class WebControl : IProviderConnection, IDisposable
 //    {

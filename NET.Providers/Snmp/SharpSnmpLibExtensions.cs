@@ -7,7 +7,7 @@ using Simple.Network;
 using Lextm.SharpSnmpLib;
 using Lextm.SharpSnmpLib.Messaging;
 
-namespace NET.Tools.Snmp
+namespace NET.Providers.Snmp
 {
 	public static class SharpSnmpLibExtensions
 	{

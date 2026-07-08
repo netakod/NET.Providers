@@ -9,7 +9,7 @@
 //using NET.Providers;
 //using System.Drawing;
 
-//namespace NET.Tools.Terminal
+//namespace NET.Providers.Terminal
 //{
 //    public class TerminalControl_OLD2 : IProviderControlConnection, IDisposable
 //    {

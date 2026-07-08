@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NET.Tools.Web
+namespace NET.Providers.Web
 {
     public enum WebProtocol
     {

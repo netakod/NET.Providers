@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using System.Collections.Specialized;
 
-namespace NET.Tools.Telnet_DevelopOld
+namespace NET.Providers.Telnet_DevelopOld
 {
     public class ChannelOptions
     {

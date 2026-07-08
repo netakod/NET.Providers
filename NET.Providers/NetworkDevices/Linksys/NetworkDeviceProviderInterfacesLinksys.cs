@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Simple;
 using Simple.Network;
-using NET.Tools.Snmp;
+using NET.Providers.Snmp;
 
 namespace NET.Providers
 {

@@ -5,9 +5,9 @@ using System.Text;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using NET.Tools.Telnet;
+using NET.Providers.Telnet;
 
-namespace NET.Tools.Telnet_DevelopOld
+namespace NET.Providers.Telnet_DevelopOld
 {
     public interface ITelnetClient
     {

@@ -5,9 +5,9 @@
 //using System.Net;
 //using System.Net.Sockets;
 //using Routrek.SSHC;
-//using NET.Tools.Telnet;
+//using NET.Providers.Telnet;
 
-//namespace NET.Tools.Terminal
+//namespace NET.Providers.Terminal
 //{
 //	public class Ssh1ControlSshGranados : ISshControl, ITelnetControl, ISSHConnectionEventReceiver, ISSHChannelEventReceiver, IDisposable
 //    {

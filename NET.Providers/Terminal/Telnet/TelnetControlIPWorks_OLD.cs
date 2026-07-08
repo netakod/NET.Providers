@@ -4,7 +4,7 @@
 //using System.Text;
 //using nsoftware.IPWorks;
 
-//namespace NET.Tools.Terminal
+//namespace NET.Providers.Terminal
 //{
 //    public class TelnetControlIPWorks : ITerminalControl, IDisposable
 //    {

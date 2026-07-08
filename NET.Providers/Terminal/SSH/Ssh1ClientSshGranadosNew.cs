@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using System.Threading;
 using Simple;
 using Simple.Network;
-using NET.Tools.Telnet;
+using NET.Providers.Telnet;
 
-namespace NET.Tools.Terminal
+namespace NET.Providers.Terminal
 {
 	public class Ssh1ClientSshGranadosNew : TelnetClientBase, ISshClient, ITelnetClient, ISSHConnectionEventReceiver, ISSHChannelEventReceiver, IDisposable
     {

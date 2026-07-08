@@ -7,12 +7,12 @@ using System.Net;
 using System.IO;
 using System.Threading.Tasks;
 using Simple;
-using NET.Tools.Web;
+using NET.Providers.Web;
 
 namespace NET.Providers
 {
 	[NetworkDeviceProviderType(DeviceProviderType.MikroTikSwOS)]
-    public class WebClientMikroTikSwOS : NET.Tools.Web.WebClient
+    public class WebClientMikroTikSwOS : NET.Providers.Web.WebClient
     {
 		#region |   Private Values  |
 

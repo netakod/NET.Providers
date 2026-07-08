@@ -6,12 +6,12 @@ using System.Net;
 using System.IO;
 using System.Threading;
 using Simple.Threading;
-using NET.Tools.Web;
+using NET.Providers.Web;
 
 namespace NET.Providers
 {
 	[NetworkDeviceProviderType(DeviceProviderType.Linksys)]
-    public class WebClientLinksys : NET.Tools.Web.WebClient
+    public class WebClientLinksys : NET.Providers.Web.WebClient
     {
         public WebClientLinksys()
         {

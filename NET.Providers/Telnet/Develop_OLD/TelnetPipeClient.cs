@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using System.Buffers;
 using System.IO.Pipelines;
 
-namespace NET.Tools.Telnet_DevelopOld
+namespace NET.Providers.Telnet_DevelopOld
 {
 	public class TelnetPipeClient : TcpPipeChannel, ITelnetClient
 	{

@@ -9,10 +9,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Simple;
 using Simple.Network;
-using NET.Tools.Telnet;
+using NET.Providers.Telnet;
 using Thought.Net.Telnet;
 
-namespace NET.Tools.Terminal
+namespace NET.Providers.Terminal
 {
     public class TelnetClientThoughtNetTelnet : ITelnetClient, IDisposable //, ITelnetControl
     {

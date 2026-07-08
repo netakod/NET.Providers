@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Buffers;
 
-namespace NET.Tools.Telnet_DevelopOld
+namespace NET.Providers.Telnet_DevelopOld
 {
     public static class Extensions
     {

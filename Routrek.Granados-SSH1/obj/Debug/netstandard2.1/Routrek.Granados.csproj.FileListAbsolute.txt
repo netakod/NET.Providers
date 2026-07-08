@@ -6,3 +6,12 @@ D:\Git\wild-wind\Sources\Routrek.Granados-SSH1\obj\Debug\netstandard2.1\Routrek.
 D:\Git\wild-wind\Sources\Routrek.Granados-SSH1\obj\Debug\netstandard2.1\Routrek.Granados.csproj.CoreCompileInputs.cache
 D:\Git\wild-wind\Sources\Routrek.Granados-SSH1\obj\Debug\netstandard2.1\Routrek.Granados.dll
 D:\Git\wild-wind\Sources\Routrek.Granados-SSH1\obj\Debug\netstandard2.1\Routrek.Granados.pdb
+D:\GitHub\netakod\NET.Providers\Routrek.Granados-SSH1\bin\Debug\netstandard2.1\Routrek.Granados.deps.json
+D:\GitHub\netakod\NET.Providers\Routrek.Granados-SSH1\bin\Debug\netstandard2.1\Routrek.Granados.dll
+D:\GitHub\netakod\NET.Providers\Routrek.Granados-SSH1\bin\Debug\netstandard2.1\Routrek.Granados.pdb
+D:\GitHub\netakod\NET.Providers\Routrek.Granados-SSH1\obj\Debug\netstandard2.1\Routrek.Granados.csproj.AssemblyReference.cache
+D:\GitHub\netakod\NET.Providers\Routrek.Granados-SSH1\obj\Debug\netstandard2.1\Routrek.Granados.GeneratedMSBuildEditorConfig.editorconfig
+D:\GitHub\netakod\NET.Providers\Routrek.Granados-SSH1\obj\Debug\netstandard2.1\Routrek.Granados.csproj.CoreCompileInputs.cache
+D:\GitHub\netakod\NET.Providers\Routrek.Granados-SSH1\obj\Debug\netstandard2.1\Routrek.Granados.sourcelink.json
+D:\GitHub\netakod\NET.Providers\Routrek.Granados-SSH1\obj\Debug\netstandard2.1\Routrek.Granados.dll
+D:\GitHub\netakod\NET.Providers\Routrek.Granados-SSH1\obj\Debug\netstandard2.1\Routrek.Granados.pdb

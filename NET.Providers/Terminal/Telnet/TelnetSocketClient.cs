@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NET.Tools.Terminal
+namespace NET.Providers.Terminal
 {
 	public class TelnetSocketClient : Telnet.TelnetSocketClient, ITelnetClient
 	{

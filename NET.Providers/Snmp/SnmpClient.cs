@@ -11,7 +11,7 @@ using Simple.Network;
 //using SnmpSharpNet;
 
 
-namespace NET.Tools.Snmp
+namespace NET.Providers.Snmp
 {
 	// TODO: Dodati nonRepiters, Repetition like properties (connection string) !!!!
 	public class SnmpClient : TaskRequestActionBase, IProviderConnection, IDisposable
@@ -859,8 +859,8 @@ namespace NET.Tools.Snmp
     /// </summary>
     /// <remarks>
     /// The Security class is used with Version 3 messages to provide message authentication and privacy. 
-    /// The Security object is not used or added to a message unless NET.Tools.SnmpVersion is SnmpVersion.V3. 
-    /// If a message to be sent is a Version 3 message, at a minimum you must set NET.Tools.SnmpSecuritySettings.Username
+    /// The Security object is not used or added to a message unless NET.Providers.SnmpVersion is SnmpVersion.V3. 
+    /// If a message to be sent is a Version 3 message, at a minimum you must set NET.Providers.SnmpSecuritySettings.Username
     /// to a valid user name for the Agent you are sending requests to.
     /// </remarks>
     public class SnmpSecuritySettings

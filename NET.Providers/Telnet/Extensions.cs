@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Buffers;
 using System.Runtime.InteropServices;
 
-namespace NET.Tools.Telnet
+namespace NET.Providers.Telnet
 {
     public static class Extensions
     {

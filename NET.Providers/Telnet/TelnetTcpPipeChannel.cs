@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Buffers;
 using Simple.Network;
 
-namespace NET.Tools.Telnet
+namespace NET.Providers.Telnet
 {
 	public class TelnetTcpPipeChannel : TcpPipeChannel
 	{

@@ -6,9 +6,9 @@
 //using System.Threading;
 //using Renci.SshNet;
 //using Renci.SshNet.Common;
-//using NET.Tools.Telnet;
+//using NET.Providers.Telnet;
 
-//namespace NET.Tools.Terminal
+//namespace NET.Providers.Terminal
 //{
 //    public class Ssh2ControlSshNet_OLD : ISshControl, ITelnetControl, IDisposable
 //    {

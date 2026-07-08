@@ -5,7 +5,7 @@
 //using Simple;
 //using Simple.Serialization;
 
-//namespace NET.Tools.Snmp
+//namespace NET.Providers.Snmp
 //{
 //    public class SnmpControlConnectionStringBuilder : ConnectionStringBuilder
 //    {

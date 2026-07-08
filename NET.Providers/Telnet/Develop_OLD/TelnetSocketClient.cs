@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 
-namespace NET.Tools.Telnet_DevelopOld
+namespace NET.Providers.Telnet_DevelopOld
 {
 	/// <summary>
 	/// The Telnet client implementation based on async TcpClient example: https://docs.microsoft.com/en-us/dotnet/framework/network-programming/asynchronous-client-socket-example

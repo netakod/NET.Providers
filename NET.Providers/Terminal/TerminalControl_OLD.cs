@@ -8,7 +8,7 @@
 //using Simple.Threading;
 //using NET.Providers;
 
-//namespace NET.Tools.Terminal
+//namespace NET.Providers.Terminal
 //{
 //    public class TerminalControl : IDeviceConnection, IDisposable
 //    {

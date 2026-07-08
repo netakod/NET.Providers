@@ -10,7 +10,7 @@ using System.Buffers;
 using Simple;
 using Simple.Network;
 
-namespace NET.Tools.Telnet
+namespace NET.Providers.Telnet
 {
 	/// <summary>
 	/// The Telnet client abstract class.
