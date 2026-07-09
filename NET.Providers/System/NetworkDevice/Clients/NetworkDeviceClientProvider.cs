@@ -11,16 +11,14 @@ using NET.Providers.Web;
 
 namespace NET.Providers
 {
-	//[ProviderGroup(ProviderType.NetworkDevice)]
-
-	public class NetworkDeviceClientProvider : Provider, IProviderConnection, IDisposable
+	public class NetworkDeviceClientProvider : ClientProvider, IProviderConnection, IDisposable
 	{
-		private NetworkDeviceClientProviderSystem system = null;
-		private NetworkDeviceClientProviderManagement management = null;
-		private NetworkDeviceClientProviderVlans vlans = null;
-		private NetworkDeviceClientProviderInterfaces interfaces = null;
-		private NetworkDeviceClientProviderAcls acls = null;
-		private NetworkDeviceClientProviderSockets sockets = null;
+		private NetworkDeviceClientProviderSystem? system = null;
+		private NetworkDeviceClientProviderManagement? management = null;
+		private NetworkDeviceClientProviderVlans? vlans = null;
+		private NetworkDeviceClientProviderInterfaces? interfaces = null;
+		private NetworkDeviceClientProviderAcls? acls = null;
+		private NetworkDeviceClientProviderSockets? sockets = null;
 
 		public NetworkDeviceClientProvider(NetworkDeviceProvider provider)
 		{
@@ -29,10 +27,7 @@ namespace NET.Providers
 
 		private NetworkDeviceProvider Provider { get; set; }
 
-		public new DeviceProviderType DeviceManagementType
-		{
-			get { return (DeviceProviderType)base.DeviceManagementType; }
-		}
+		public new DeviceProviderType ProviderType => (DeviceProviderType)base.ProviderType;
 
 		public bool UseSnmp
 		{
@@ -40,10 +35,7 @@ namespace NET.Providers
 			set { this.Provider.UseSnmp = value; }
 		}
 
-		public SnmpClient Snmp
-		{
-			get { return this.Provider.Snmp; }
-		}
+		public SnmpClient Snmp => this.Provider.Snmp;
 
 		public bool UseTerminal
 		{
@@ -51,10 +43,7 @@ namespace NET.Providers
 			set { this.Provider.UseTerminal = value; }
 		}
 
-		public TerminalClient Terminal
-		{
-			get { return this.Provider.Terminal; }
-		}
+		public TerminalClient Terminal =>  this.Provider.Terminal;
 
 		public bool UseWeb
 		{
@@ -62,76 +51,19 @@ namespace NET.Providers
 			set { this.Provider.UseWeb = value; }
 		}
 
-		public WebClient Web
-		{
-			get { return this.Provider.Web; }
-		}
+		public WebClient Web => this.Provider.Web;
 
-		public NetworkDeviceClientProviderSystem System
-		{
-			get
-			{
-				if (this.system == null)
-					this.system = new NetworkDeviceClientProviderSystem(this.Provider.System);
+		public NetworkDeviceClientProviderSystem System => this.system ??= new NetworkDeviceClientProviderSystem(this.Provider.System);
 
-				return this.system;
-			}
-		}
+		public NetworkDeviceClientProviderManagement Management => this.management ??= new NetworkDeviceClientProviderManagement(this.Provider.Management);
 
-		public NetworkDeviceClientProviderManagement Management
-		{
-			get
-			{
-				if (this.management == null)
-					this.management = new NetworkDeviceClientProviderManagement(this.Provider.Management);
+		public NetworkDeviceClientProviderVlans Vlans => this.vlans ??= new NetworkDeviceClientProviderVlans(this.Provider.Vlans);
 
-				return this.management;
-			}
-		}
+		public NetworkDeviceClientProviderInterfaces Interfaces => this.interfaces ??= new NetworkDeviceClientProviderInterfaces(this.Provider.Interfaces);
 
-		public NetworkDeviceClientProviderVlans Vlans
-		{
-			get
-			{
-				if (this.vlans == null)
-					this.vlans = new NetworkDeviceClientProviderVlans(this.Provider.Vlans);
+		public NetworkDeviceClientProviderAcls Acls => this.acls ??= new NetworkDeviceClientProviderAcls(this.Provider.Acls);
 
-				return this.vlans;
-			}
-		}
-
-		public NetworkDeviceClientProviderInterfaces Interfaces
-		{
-			get
-			{
-				if (this.interfaces == null)
-					this.interfaces = new NetworkDeviceClientProviderInterfaces(this.Provider.Interfaces);
-
-				return this.interfaces;
-			}
-		}
-
-		public NetworkDeviceClientProviderAcls Acls
-		{
-			get
-			{
-				if (this.acls == null)
-					this.acls = new NetworkDeviceClientProviderAcls(this.Provider.Acls);
-
-				return this.acls;
-			}
-		}
-
-		public NetworkDeviceClientProviderSockets Sockets
-		{
-			get
-			{
-				if (this.sockets == null)
-					this.sockets = new NetworkDeviceClientProviderSockets(this.Provider.Sockets);
-
-				return this.sockets;
-			}
-		}
+		public NetworkDeviceClientProviderSockets Sockets => this.sockets ??= new NetworkDeviceClientProviderSockets(this.Provider.Sockets);
 
 		//public override bool IsConnected
 		//{
@@ -143,29 +75,14 @@ namespace NET.Providers
 		//	return this.Provider.Connect();
 		//}
 
-		public override async ValueTask<TaskInfo<string>> TestConnectionAsync(WorkerContext workerContext)
-		{
-			return await this.Provider.TestConnectionAsync(workerContext);
-		}
+		public override async ValueTask<TaskInfo<string>> TestConnectionAsync(WorkerContext workerContext) =>  await this.Provider.TestConnectionAsync(workerContext);
 
-		public override async ValueTask CloseAsync()
-		{
-			await this.Provider.CloseAsync();
-		}
+		public override async ValueTask CloseAsync() => await this.Provider.CloseAsync();
 
-		public override async ValueTask FinishUpdateAsync()
-		{
-			await this.Provider.FinishUpdateAsync();
-		}
+		public override async ValueTask FinishUpdateAsync() =>  await this.Provider.FinishUpdateAsync();
 
-		public override void SetLogging(string logFileName)
-		{
-			this.Provider.SetLogging(logFileName);
-		}
+		public override void SetLogging(string logFileName) => this.Provider.SetLogging(logFileName);
 
-		public override void Dispose()
-		{
-			this.Provider.Dispose();
-		}
+		public override void Dispose() => this.Provider.Dispose();
 	}
 }

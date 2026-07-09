@@ -1,17 +1,20 @@
-using System.Runtime.InteropServices;
+using System.Reflection;
 
-// In SDK-style projects such as this one, several assembly attributes that were historically
-// defined in this file are now automatically added during build and populated with
-// values defined in project properties. For details of which attributes are included
-// and how to customise this process see: https://aka.ms/assembly-info-properties
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyInformationalVersion("1.1.0")]
 
-
-// Setting ComVisible to false makes the types in this assembly not visible to COM
-// components.  If you need to access a type in this assembly from COM, set the ComVisible
-// attribute to true on that type.
-
-[assembly: ComVisible(false)]
-
-// The following GUID is for the ID of the typelib if this project is exposed to COM.
-
-[assembly: Guid("711834bb-d2c0-4a9d-a0c4-7c6866036b5a")]
+[assembly: AssemblyProduct("NET.Providers")] // Product Name
+[assembly: AssemblyDescription("NET.Providers NETAKOD-Community Library")]
+[assembly: AssemblyCompany("NETAKOD-Community")]
+[assembly: AssemblyCopyright("Copyright © NETAKOD-Community 2025")]
+[assembly: AssemblyTrademark("NET.Providers™")]
+[assembly: AssemblyCulture("")]
+[assembly: AssemblyConfiguration("")]

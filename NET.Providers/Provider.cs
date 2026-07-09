@@ -29,10 +29,10 @@ namespace NET.Providers
 		//}
 
 		//public ProviderManager Manager { get; protected internal set; }
-		public ProviderGroup ProviderModelType { get; protected internal set; }
-		public int DeviceManagementType { get; protected internal set; }
+		public ProviderGroup ProviderGroup { get; protected internal set; }
+		public int ProviderType { get; protected internal set; }
 
-		public object Owner { get; set; }
+		public object? Owner { get; set; }
 		//public abstract IRequestResult Connect();
 		public abstract ValueTask<TaskInfo<string>> TestConnectionAsync(WorkerContext workerContext);
 		//public abstract bool IsConnected { get; }

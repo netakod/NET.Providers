@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Simple;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Reflection;
-using Simple;
+using System.Text;
 
 namespace NET.Providers
 {
@@ -12,7 +13,7 @@ namespace NET.Providers
 		//private static ProviderDiscovery instance = null;
 		private static object lockObject = new object();
 
-		private static IEnumerable<Type> assemblyTypes = null;
+		private static IEnumerable<Type> assemblyTypes;
 		private static Dictionary<Type, Dictionary<DeviceProviderType, Type>> networkDeviceInheritedClassesByProviderTypeByConnectionControlType = new Dictionary<Type, Dictionary<DeviceProviderType, Type>>();
 		//private Dictionary<int, IProviderModel> providerModelsByProviderModelType = new Dictionary<int, IProviderModel>();
 		private static List<ProviderInfo> providerList = new List<ProviderInfo>();
@@ -44,11 +45,11 @@ namespace NET.Providers
 				if (typeof(Provider).IsAssignableFrom(objectType))
 				{
 					ProviderInfo providerInfo = CollectProviderInfo<ProviderInfo>(objectType);
-					
-					if (providerInfo.ObjectType != typeof(NetworkDeviceClientProvider))
+
+					if (!providerInfo.ObjectType.IsSubclassOf(typeof(ClientProvider)))
 						providerList.Add(providerInfo);
 				}
-				else if (typeof(ProviderModule).IsAssignableFrom(objectType))
+				if (typeof(ProviderModule).IsAssignableFrom(objectType))
 				{
 					ProviderModuleInfo providerModuleInfo = CollectProviderInfo<ProviderModuleInfo>(objectType);
 
@@ -59,39 +60,71 @@ namespace NET.Providers
 		}
 
 		// TODO: Create Dictionary that caches object types by providerType
-		public static Provider CreateProvider(ProviderGroup providerType, int deviceManagementType)
+		public static T? CreateProvider<T>(ProviderGroup providerGroup, int providerType)
+			where T : Provider
 		{
-			Provider result = null;
-			Type objectType = providerList.Find(info => info.ProviderType == providerType && info.DeviceManagementType == deviceManagementType)?.ObjectType;
+			T? result = null;
+			Type? objectType = providerList.Find(info => info.ProviderType == providerGroup && info.DeviceManagementType == providerType)?.ObjectType;
 
 			if (objectType == null) // Try with Generic device type (0), if exists
-				objectType = providerList.Find(info => info.ProviderType == providerType && info.DeviceManagementType == 0)?.ObjectType;
+				objectType = providerList.Find(info => info.ProviderType == providerGroup && info.DeviceManagementType == 0)?.ObjectType;
 
 			if (objectType != null)
 			{
-				result = Activator.CreateInstance(objectType) as Provider;
-				result.ProviderModelType = providerType;
-				result.DeviceManagementType = deviceManagementType;
-				//result.Initialize();
+				result = Activator.CreateInstance(objectType) as T;
+
+				if (result != null)
+				{
+					result.ProviderGroup = providerGroup;
+					result.ProviderType = providerType;
+					//result.Initialize();
+				}
+			}
+
+			return result;
+		}
+
+		public static ProviderModule? CreateProviderModule(Provider provider, int deviceManagementType, int moduleType)
+		{
+			ProviderModule? result = null;
+			Type? objectType = providerModuleList.Find(info => info.ProviderType == provider.ProviderGroup && info.DeviceManagementType == deviceManagementType && info.ModuleType == moduleType)?.ObjectType;
+
+			if (objectType == null) // Try with Generic device type (0), if exists
+				objectType = providerModuleList.Find(info => info.ProviderType == provider.ProviderGroup && info.DeviceManagementType == 0 && info.ModuleType == moduleType)?.ObjectType;
+
+			if (objectType != null)
+			{
+				result = Activator.CreateInstance(objectType) as ProviderModule;
+
+				if (result != null)
+				{
+					result.ModuleType = moduleType;
+					result.Provider = provider;
+				}
 			}
 
 			return result;
 		}
 
 		// TODO: Create Dictionary that caches object types by providerType, deviceType
-		public static ProviderModule CreateProviderModule(Provider provider, int deviceManagementType, int moduleType)
+		public static T? CreateProviderModule<T>(Provider provider, int deviceManagementType, int moduleType)
+			where T : ProviderModule
 		{
-			ProviderModule result = null;
-			Type objectType = providerModuleList.Find(info => info.ProviderType == provider.ProviderModelType && info.DeviceManagementType == deviceManagementType && info.ModuleType == moduleType)?.ObjectType;
+			T? result = null;
+			Type? objectType = providerModuleList.Find(info => info.ProviderType == provider.ProviderGroup && info.DeviceManagementType == deviceManagementType && info.ModuleType == moduleType)?.ObjectType;
 
 			if (objectType == null) // Try with Generic device type (0), if exists
-				objectType = providerModuleList.Find(info => info.ProviderType == provider.ProviderModelType && info.DeviceManagementType == 0 && info.ModuleType == moduleType)?.ObjectType;
+				objectType = providerModuleList.Find(info => info.ProviderType == provider.ProviderGroup && info.DeviceManagementType == 0 && info.ModuleType == moduleType)?.ObjectType;
 
 			if (objectType != null)
 			{
-				result = Activator.CreateInstance(objectType) as ProviderModule;
-				result.ModuleType = moduleType;
-				result.Provider = provider;
+				result = Activator.CreateInstance(objectType) as T;
+
+				if (result != null)
+				{
+					result.ModuleType = moduleType;
+					result.Provider = provider;
+				}
 			}
 
 			return result;
@@ -102,10 +135,11 @@ namespace NET.Providers
 		//	return CreateProviderConnectionControl<T>(ProviderModelType.NetworkDevice, (int)deviceManagementType);
 		//}
 
-		public static T CreateProviderClient<T>(ProviderGroup providerModel, int deviceManagementType) where T : class
+		public static T? CreateProviderClient<T>(ProviderGroup providerModel, int deviceManagementType) 
+			where T : class
 		{
 			Type controlType = GetProviderClientType(typeof(T), providerModel, deviceManagementType);
-			T result = Activator.CreateInstance(controlType) as T;
+			T? result = Activator.CreateInstance(controlType) as T;
 
 			return result;
 		}
@@ -114,7 +148,7 @@ namespace NET.Providers
 		{
 			Type result = baseControlType;
 
-			Dictionary<ProviderGroup, Dictionary<int, Type>> connectionControlTypesByDeviceTypeByProviderType;
+			Dictionary<ProviderGroup, Dictionary<int, Type>>? connectionControlTypesByDeviceTypeByProviderType;
 
 			if (!connectionControlTypesByDeviceTypeByProviderTypeByBaseControlType.TryGetValue(baseControlType, out connectionControlTypesByDeviceTypeByProviderType))
 			{
@@ -135,7 +169,7 @@ namespace NET.Providers
 					foreach (DeviceProviderTypeAttribute attribute in connectionControlType.GetCustomAttributes(typeof(DeviceProviderTypeAttribute), true))
 						itemDeviceType = attribute.DeviceProviderType;
 
-					Dictionary<int, Type> connectionControlTypesByDeviceType;
+					Dictionary<int, Type>? connectionControlTypesByDeviceType;
 
 					if (!connectionControlTypesByDeviceTypeByProviderType.TryGetValue(itemProviderType, out connectionControlTypesByDeviceType))
 					{
@@ -151,11 +185,12 @@ namespace NET.Providers
 			}
 			else
 			{
-				Dictionary<int, Type> connectionControlTypesByDeviceType;
+				Dictionary<int, Type>? connectionControlTypesByDeviceType;
+				Type? type = null;
 
 				if (connectionControlTypesByDeviceTypeByProviderType.TryGetValue(providerType, out connectionControlTypesByDeviceType))
-					if (!connectionControlTypesByDeviceType.TryGetValue(deviceManagementType, out result))
-						result = baseControlType;
+					if (connectionControlTypesByDeviceType.TryGetValue(deviceManagementType, out type))
+						result = type;
 			}
 
 			return result;
@@ -189,10 +224,56 @@ namespace NET.Providers
 				connectionControlInfoListsByBaseControlType.Add(baseControlType, connectionControlInfoList);
 			}
 
-			ProviderInfo connectionControlInfo = connectionControlInfoList.Find(item => item.ProviderType == providerType && item.DeviceManagementType == deviceManagementType);
+			ProviderInfo? connectionControlInfo = connectionControlInfoList.Find(item => item.ProviderType == providerType && item.DeviceManagementType == deviceManagementType);
 
 			return (connectionControlInfo != null) ? connectionControlInfo.ObjectType : baseControlType;
 		}
+
+
+		public static NetworkDeviceClientProvider CreateNetworkDeviceClientProvider(INetworkDevice networkDevice)
+		{
+			return CreateNetworkDeviceClientProvider(networkDevice, setLogging: true);
+		}
+
+		public static NetworkDeviceClientProvider CreateNetworkDeviceClientProvider(INetworkDevice networkDevice, bool setLogging, string logFolder = "Logs")
+		{
+			NetworkDeviceProvider provider = ProviderFactory.CreateProvider<NetworkDeviceProvider>(ProviderGroup.NetworkDevice, (int)networkDevice.ProviderType)!;
+			NetworkDeviceClientProvider clientProvider = new NetworkDeviceClientProvider(provider);
+
+			UpdateNetworkDeviceClientProviderSettings(clientProvider, networkDevice);
+
+			if (setLogging)
+			{
+				string logPath = String.Format("{0}\\{1}", System.IO.Directory.GetCurrentDirectory(), logFolder);
+
+				if (!Directory.Exists(logPath))
+					Directory.CreateDirectory(logPath);
+
+				clientProvider.SetLogging(String.Format("{0}\\{1}.log", logPath, networkDevice.Hostname));
+			}
+
+			return clientProvider;
+		}
+
+		public static void UpdateNetworkDeviceClientProviderSettings(NetworkDeviceClientProvider clientProvider, INetworkDevice networkDevice)
+		{
+			clientProvider.UseSnmp = networkDevice.UseSnmp;
+
+			if (clientProvider.UseSnmp)
+				clientProvider.SetSnmpSettings(networkDevice);
+
+			clientProvider.UseTerminal = networkDevice.UseTerminal;
+
+			if (clientProvider.UseTerminal)
+				clientProvider.SetTerminalSettings(networkDevice);
+
+			clientProvider.UseWeb = networkDevice.UseWeb;
+
+			if (clientProvider.UseWeb)
+				clientProvider.SetWebSettings(networkDevice);
+		}
+
+
 
 		//public Type GetNetworkDeviceConnectionControl_OLD(NetworkDeviceType deviceType, Type baseControlType)
 		//{
@@ -282,6 +363,7 @@ namespace NET.Providers
 	{
 		public ProviderInfo()
 		{
+			this.ObjectType = typeof(object);
 		}
 
 		public ProviderInfo(Type objectType, ProviderGroup providerType, int deviceManagementType)

@@ -19,3 +19,13 @@ D:\GitHub\netakod\NET.Providers\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgi
 D:\GitHub\netakod\NET.Providers\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.sourcelink.json
 D:\GitHub\netakod\NET.Providers\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.dll
 D:\GitHub\netakod\NET.Providers\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.pdb
+D:\GIT\wild-wind\Sources\NET.Providers\HtmlAgilityPack\bin\Debug\netstandard2.1\HtmlAgilityPack.deps.json
+D:\GIT\wild-wind\Sources\NET.Providers\HtmlAgilityPack\bin\Debug\netstandard2.1\HtmlAgilityPack.dll
+D:\GIT\wild-wind\Sources\NET.Providers\HtmlAgilityPack\bin\Debug\netstandard2.1\HtmlAgilityPack.pdb
+D:\GIT\wild-wind\Sources\NET.Providers\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.csproj.AssemblyReference.cache
+D:\GIT\wild-wind\Sources\NET.Providers\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.GeneratedMSBuildEditorConfig.editorconfig
+D:\GIT\wild-wind\Sources\NET.Providers\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.AssemblyInfoInputs.cache
+D:\GIT\wild-wind\Sources\NET.Providers\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.AssemblyInfo.cs
+D:\GIT\wild-wind\Sources\NET.Providers\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.csproj.CoreCompileInputs.cache
+D:\GIT\wild-wind\Sources\NET.Providers\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.dll
+D:\GIT\wild-wind\Sources\NET.Providers\HtmlAgilityPack\obj\Debug\netstandard2.1\HtmlAgilityPack.pdb

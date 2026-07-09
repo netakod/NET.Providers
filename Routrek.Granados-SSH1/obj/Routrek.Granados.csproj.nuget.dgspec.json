@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GitHub\\netakod\\NET.Providers\\Routrek.Granados-SSH1\\Routrek.Granados.csproj": {}
+    "D:\\GIT\\wild-wind\\Sources\\NET.Providers\\Routrek.Granados-SSH1\\Routrek.Granados.csproj": {}
   },
   "projects": {
-    "D:\\GitHub\\netakod\\NET.Providers\\Routrek.Granados-SSH1\\Routrek.Granados.csproj": {
+    "D:\\GIT\\wild-wind\\Sources\\NET.Providers\\Routrek.Granados-SSH1\\Routrek.Granados.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GitHub\\netakod\\NET.Providers\\Routrek.Granados-SSH1\\Routrek.Granados.csproj",
+        "projectUniqueName": "D:\\GIT\\wild-wind\\Sources\\NET.Providers\\Routrek.Granados-SSH1\\Routrek.Granados.csproj",
         "projectName": "Routrek.Granados",
-        "projectPath": "D:\\GitHub\\netakod\\NET.Providers\\Routrek.Granados-SSH1\\Routrek.Granados.csproj",
+        "projectPath": "D:\\GIT\\wild-wind\\Sources\\NET.Providers\\Routrek.Granados-SSH1\\Routrek.Granados.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "D:\\GitHub\\netakod\\NET.Providers\\Routrek.Granados-SSH1\\obj\\",
+        "outputPath": "D:\\GIT\\wild-wind\\Sources\\NET.Providers\\Routrek.Granados-SSH1\\obj\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "fallbackFolders": [

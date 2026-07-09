@@ -14,30 +14,28 @@ namespace NET.Providers
 	[ProviderType(ProviderGroup.NetworkDevice)]
 	public class NetworkDeviceProvider : Provider, IProviderConnection, IDisposable
 	{
-		private SnmpClient snmp = null;
-		private TerminalClient terminal = null;
-		private WebClient web = null;
+		private SnmpClient? snmp = null;
+		private TerminalClient? terminal = null;
+		private WebClient? web = null;
 
-		private INetworkDeviceProviderSystem system = null;
-		private INetworkDeviceProviderManagement management = null;
-		private INetworkDeviceProviderVlans vlans = null;
-		private INetworkDeviceProviderInterfaces interfaces = null;
-		private INetworkDeviceProviderAcls acls = null;
-		private INetworkDeviceProviderSockets sockets = null;
+		private INetworkDeviceProviderSystem? system = null;
+		private INetworkDeviceProviderManagement? management = null;
+		private INetworkDeviceProviderVlans? vlans = null;
+		private INetworkDeviceProviderInterfaces? interfaces = null;
+		private INetworkDeviceProviderAcls? acls = null;
+		private INetworkDeviceProviderSockets? sockets = null;
 
-		public new DeviceProviderType DeviceManagementType
-		{
-			get { return (DeviceProviderType)base.DeviceManagementType; }
-		}
+		public new DeviceProviderType ProviderType => (DeviceProviderType)base.ProviderType;
 
 		public bool UseSnmp { get; set; }
+
 		public SnmpClient Snmp
 		{
 			get
 			{
 				if (this.snmp == null)
 				{
-					this.snmp = ProviderFactory.CreateProviderClient<SnmpClient>(ProviderGroup.NetworkDevice, (int)this.DeviceManagementType);
+					this.snmp = ProviderFactory.CreateProviderClient<SnmpClient>(ProviderGroup.NetworkDevice, (int)this.ProviderType)!;
 					this.snmp.Owner = this;
 				}
 
@@ -52,7 +50,7 @@ namespace NET.Providers
 			{
 				if (this.terminal == null)
 				{
-					this.terminal = ProviderFactory.CreateProviderClient<TerminalClient>(ProviderGroup.NetworkDevice, (int)this.DeviceManagementType);
+					this.terminal = ProviderFactory.CreateProviderClient<TerminalClient>(ProviderGroup.NetworkDevice, (int)this.ProviderType)!;
 					this.terminal.Owner = this;
 				}
 
@@ -67,7 +65,7 @@ namespace NET.Providers
 			{
 				if (this.web == null)
 				{
-					this.web = ProviderFactory.CreateProviderClient<WebClient>(ProviderGroup.NetworkDevice, (int)this.DeviceManagementType);
+					this.web = ProviderFactory.CreateProviderClient<WebClient>(ProviderGroup.NetworkDevice, (int)this.ProviderType)!;
 					this.web.Owner = this;
 				}
 
@@ -75,71 +73,17 @@ namespace NET.Providers
 			}
 		}
 
-		public INetworkDeviceProviderSystem System
-		{
-			get
-			{
-				if (this.system == null)
-					this.system = ProviderFactory.CreateProviderModule(this, base.DeviceManagementType, (int)NetworkDeviceModule.System) as INetworkDeviceProviderSystem;
+		public INetworkDeviceProviderSystem System => this.system ??= (ProviderFactory.CreateProviderModule(this, base.ProviderType, (int)NetworkDeviceModule.System) as INetworkDeviceProviderSystem)!;
 
-				return this.system;
-			}
-		}
+		public INetworkDeviceProviderManagement Management => this.management ??= (ProviderFactory.CreateProviderModule(this, base.ProviderType, (int)NetworkDeviceModule.Management) as INetworkDeviceProviderManagement)!;
 
-		public INetworkDeviceProviderManagement Management
-		{
-			get
-			{
-				if (this.management == null)
-					this.management = ProviderFactory.CreateProviderModule(this, base.DeviceManagementType, (int)NetworkDeviceModule.Management) as INetworkDeviceProviderManagement;
+		public INetworkDeviceProviderVlans Vlans => this.vlans ??= (ProviderFactory.CreateProviderModule(this, base.ProviderType, (int)NetworkDeviceModule.Vlans) as INetworkDeviceProviderVlans)!;
 
-				return this.management;
-			}
-		}
+		public INetworkDeviceProviderInterfaces Interfaces => this.interfaces ??= (ProviderFactory.CreateProviderModule(this, base.ProviderType, (int)NetworkDeviceModule.Interfaces) as INetworkDeviceProviderInterfaces)!;
 
-		public INetworkDeviceProviderVlans Vlans
-		{
-			get
-			{
-				if (this.vlans == null)
-					this.vlans = ProviderFactory.CreateProviderModule(this, base.DeviceManagementType, (int)NetworkDeviceModule.Vlans) as INetworkDeviceProviderVlans;
+		public INetworkDeviceProviderAcls Acls => this.acls ??= (ProviderFactory.CreateProviderModule(this, base.ProviderType, (int)NetworkDeviceModule.Acls) as INetworkDeviceProviderAcls)!;
 
-				return this.vlans;
-			}
-		}
-
-		public INetworkDeviceProviderInterfaces Interfaces
-		{
-			get
-			{
-				if (this.interfaces == null)
-					this.interfaces = ProviderFactory.CreateProviderModule(this, base.DeviceManagementType, (int)NetworkDeviceModule.Interfaces) as INetworkDeviceProviderInterfaces;
-
-				return this.interfaces;
-			}
-		}
-
-		public INetworkDeviceProviderAcls Acls
-		{
-			get
-			{
-				if (this.acls == null)
-					this.acls = ProviderFactory.CreateProviderModule(this, base.DeviceManagementType, (int)NetworkDeviceModule.Acls) as INetworkDeviceProviderAcls;
-
-				return this.acls;
-			}
-		}
-
-		public INetworkDeviceProviderSockets Sockets
-		{
-			get
-			{
-				if (this.sockets == null)
-					this.sockets = ProviderFactory.CreateProviderModule(this, base.DeviceManagementType, (int)NetworkDeviceModule.Sockets) as INetworkDeviceProviderSockets;
-
-				return this.sockets;
-			}
-		}
+		public INetworkDeviceProviderSockets Sockets => this.sockets ??= (ProviderFactory.CreateProviderModule(this, base.ProviderType, (int)NetworkDeviceModule.Sockets) as INetworkDeviceProviderSockets)!;
 
 		//public override IRequestResult Connect()
 		//{
@@ -234,7 +178,7 @@ namespace NET.Providers
 			bool snmpSecceeded = false;
 			bool terminalSucceeded = false;
 			bool webSucceeded = false;
-			string systemDescription = String.Empty;
+			string? systemDescription = null;
 			//string systemName = null;
 
 			if (this.UseSnmp)
@@ -264,7 +208,7 @@ namespace NET.Providers
 
 					if (snmpSecceeded)
 					{
-						systemDescription = snmpConnectionInfo.ResultValue.ToString();
+						systemDescription = snmpConnectionInfo.ResultValue?.ToString();
 						connectionMessage.AppendLine(systemDescription);
 					}
 

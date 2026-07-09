@@ -700,11 +700,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GitHub\\netakod\\NET.Providers\\HtmlAgilityPack\\HtmlAgilityPack.csproj",
+      "projectUniqueName": "D:\\GIT\\wild-wind\\Sources\\NET.Providers\\HtmlAgilityPack\\HtmlAgilityPack.csproj",
       "projectName": "HtmlAgilityPack",
-      "projectPath": "D:\\GitHub\\netakod\\NET.Providers\\HtmlAgilityPack\\HtmlAgilityPack.csproj",
+      "projectPath": "D:\\GIT\\wild-wind\\Sources\\NET.Providers\\HtmlAgilityPack\\HtmlAgilityPack.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "D:\\GitHub\\netakod\\NET.Providers\\HtmlAgilityPack\\obj\\",
+      "outputPath": "D:\\GIT\\wild-wind\\Sources\\NET.Providers\\HtmlAgilityPack\\obj\\",
       "projectStyle": "PackageReference",
       "crossTargeting": true,
       "fallbackFolders": [

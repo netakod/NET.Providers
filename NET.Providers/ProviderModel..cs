@@ -12,43 +12,47 @@ namespace NET.Providers
 	public static class ProviderModel
 	{
 		public static readonly ProviderTypeModel ProviderTypeModel				  = new ProviderTypeModel();
-		public static readonly ProviderManagementTypeModel NetworkDeviceTypeModel = new ProviderManagementTypeModel();
-		public static readonly NetworkDeviceModuleModel NetworkDeviceModuleModel  = new NetworkDeviceModuleModel();
+		public static readonly NetworkDeviceProviderTypeModel NetworkDeviceTypeModel = new NetworkDeviceProviderTypeModel();
+		public static readonly NetworkDeviceProviderModuleModel NetworkDeviceModuleModel  = new NetworkDeviceProviderModuleModel();
+		public static readonly GsmProviderTypeModel GsmProviderTypeModel = new GsmProviderTypeModel();
 
 		static ProviderModel()
 		{
-			ProviderTypes		 = ModelHelper.CreateModelDictionaryByReflection<int, ModelElement>(ProviderTypeModel,	      typeModel => typeModel.Index, null);
-			NetworkDeviceTypes	 = ModelHelper.CreateModelDictionaryByReflection<int, ModelElement>(NetworkDeviceTypeModel,   typeModel => typeModel.Index, null);
-			NetworkDeviceModules = ModelHelper.CreateModelDictionaryByReflection<int, ModelElement>(NetworkDeviceModuleModel, typeModel => typeModel.Index, null);
+			ProviderTypes		 = ModelHelper.CreateModelDictionaryByReflection<int, ModelElement>(ProviderTypeModel,	      typeModel => typeModel.Index, owner: null);
+			NetworkDeviceTypes	 = ModelHelper.CreateModelDictionaryByReflection<int, ModelElement>(NetworkDeviceTypeModel, typeModel => typeModel.Index, owner: null);
+			NetworkDeviceModules = ModelHelper.CreateModelDictionaryByReflection<int, ModelElement>(NetworkDeviceModuleModel, typeModel => typeModel.Index, owner: null);
+			GsmTypes			 = ModelHelper.CreateModelDictionaryByReflection<int, ModelElement>(GsmProviderTypeModel,     typeModel => typeModel.Index, owner: null);
 		}
 
 		public static ModelDictionary<int, ModelElement> ProviderTypes		  { get; private set; }
 		public static ModelDictionary<int, ModelElement> NetworkDeviceTypes	  { get; private set; }
 		public static ModelDictionary<int, ModelElement> NetworkDeviceModules { get; private set; }
+		public static ModelDictionary<int, ModelElement> GsmTypes { get; private set; }
 	}
 
 	public class ProviderTypeModel
 	{
 		public ModelElement NetworkDevice = new ModelElement() { Index = (int)ProviderGroup.NetworkDevice };
+		public ModelElement GsmProvider   = new ModelElement() { Index = (int)ProviderGroup.GsmProvider };
 	}
 
-	public class ProviderManagementTypeModel
+	public class NetworkDeviceProviderTypeModel
 	{
 		// Note that the index numbers are very important to be unique. They are set in datastore and uniquely specify device type cannot be changed during app lifecycle
 		public ModelElement Generic          = new ModelElement() { Index = (int)DeviceProviderType.Generic };
 		public ModelElement AristaEOS		 = new ModelElement() { Index = (int)DeviceProviderType.AristaEOS };
 		public ModelElement CiscoIOS         = new ModelElement() { Index = (int)DeviceProviderType.CiscoIOS };
 		public ModelElement Dell             = new ModelElement() { Index = (int)DeviceProviderType.Dell };
-		public ModelElement HPProCurve       = new ModelElement() { Index = (int)DeviceProviderType.HPProCurve,	    Caption = "HP ProCurve" };
-		public ModelElement C3Com            = new ModelElement() { Index = (int)DeviceProviderType.C3Com,		    Name    = "3Com", Caption = "3Com" };
-		public ModelElement ZyXEL            = new ModelElement() { Index = (int)DeviceProviderType.ZyXEL,			Caption = "ZyXEL" };
-		public ModelElement ZyXELWebManaged  = new ModelElement() { Index = (int)DeviceProviderType.ZyXELWebManaged,  Caption = "ZyXEL Web Managed" };
+		public ModelElement HPProCurve       = new ModelElement() { Index = (int)DeviceProviderType.HPProCurve,			  Caption = "HP ProCurve" };
+		public ModelElement C3Com            = new ModelElement() { Index = (int)DeviceProviderType.C3Com, Name = "3Com", Caption = "3Com" };
+		public ModelElement ZyXEL            = new ModelElement() { Index = (int)DeviceProviderType.ZyXEL,			      Caption = "ZyXEL" };
+		public ModelElement ZyXELWebManaged  = new ModelElement() { Index = (int)DeviceProviderType.ZyXELWebManaged,	  Caption = "ZyXEL Web Managed" };
 		public ModelElement Linksys          = new ModelElement() { Index = (int)DeviceProviderType.Linksys };
-		public ModelElement MikroTikSwOS     = new ModelElement() { Index = (int)DeviceProviderType.MikroTikSwOS,     Caption = "MikroTik SwOS" };
-		public ModelElement MikroTikRouterOS = new ModelElement() { Index = (int)DeviceProviderType.MikroTikRouterOS, Caption = "MikroTik RouterOS" };
+		public ModelElement MikroTikSwOS     = new ModelElement() { Index = (int)DeviceProviderType.MikroTikSwOS,		  Caption = "MikroTik SwOS" };
+		public ModelElement MikroTikRouterOS = new ModelElement() { Index = (int)DeviceProviderType.MikroTikRouterOS,	  Caption = "MikroTik RouterOS" };
 	}
 
-	public class NetworkDeviceModuleModel
+	public class NetworkDeviceProviderModuleModel
 	{
 		public ModelElement System	   = new ModelElement() { Index = (int)NetworkDeviceModule.System };
 		public ModelElement Management = new ModelElement() { Index = (int)NetworkDeviceModule.Management };
@@ -57,10 +61,19 @@ namespace NET.Providers
 		public ModelElement Sockets	   = new ModelElement() { Index = (int)NetworkDeviceModule.Sockets };
 	}
 
+	public class GsmProviderTypeModel
+	{
+		// Note that the index numbers are very important to be unique. They are set in datastore and uniquely specify device type cannot be changed during app lifecycle
+		public ModelElement Generic = new ModelElement() { Index = (int)GsmProviderType.Generic };
+	}
+
 	public enum ProviderGroup
 	{
 		[Description("Network Device")]
-		NetworkDevice = 0
+		NetworkDevice = 0,
+
+		[Description("GSM Provider")]
+		GsmProvider = 1,
 	}
 
 	public enum DeviceProviderType
@@ -94,6 +107,11 @@ namespace NET.Providers
 
 		[Description("MikroTik RouterOS")]
 		MikroTikRouterOS = 10,
+	}
+
+	public enum GsmProviderType
+	{
+		Generic = 0,
 	}
 
 	public enum NetworkDeviceModule

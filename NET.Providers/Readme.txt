@@ -1,0 +1,1 @@
+1.0.0	The initinal version of NET.Providers libraries.
